@@ -33,4 +33,5 @@ jobs:
       - name: Run a multi-line script
         run: |
           git --version
+          git tag v1.0 && git push origin v1.0
           echo test, and deploy your project.
