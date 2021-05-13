@@ -8,4 +8,9 @@ pip install -r requirements.txt
 python manage.py runserver
 ```
 
+Currently there is a database attached to this project. It will be added to .gitignore. For now, you can access the admin panel by going to '/admin'.
+```
+Username: admin
+Password: admin
+```
 #### Client side coming soon
