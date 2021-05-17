@@ -2,16 +2,24 @@
   <img alt="Vue logo" src="./assets/logo.png"/>
   <router-link to="/">Home</router-link>
   <router-link to="/about">About</router-link>
-  <router-view />
+  <router-view/>
+  <p>{{ $store.state.test_module.count }}</p>
+  <button @click="$store.commit(INCREMENT)">Click me</button>
 </template>
 
 <script>
+import {INCREMENT} from "./store/mutation_types";
 
 export default {
   name: "App",
-  components: {
-  },
-};
+  components: {},
+  data() {
+    return {
+      INCREMENT
+  };
+}
+}
+;
 </script>
 
 <style>
