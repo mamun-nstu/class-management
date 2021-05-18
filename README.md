@@ -1,5 +1,6 @@
 # Class Management
 
+## Server Side
 The project has been created using python 3.8. It should support all python 3.7+ versions. Make sure you have virtualenv installed. Then run the following commands to run the project.
 ```
 virtualenv venv
@@ -13,4 +14,9 @@ Currently there is a database attached to this project. It will be added to .git
 Username: admin
 Password: admin
 ```
-#### Client side coming soon
+## Client Side
+
+```
+cd client
+npm run serve
+```
