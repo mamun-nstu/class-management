@@ -1,11 +1,16 @@
 <template>
-  <Header />
-  <router-link to="/">Home</router-link>
-  <router-link to="/about">About</router-link>
-  <router-view/>
-  <p>{{ $store.state.test_module.count }}</p>
-  <button @click="$store.commit(INCREMENT)">Click me</button>
-  <Footer />
+  <v-app>
+
+    <v-main>
+      <Header/>
+      <router-link to="/">Home</router-link>
+      <router-link to="/about">About</router-link>
+      <router-view/>
+      <p>{{ $store.state.test_module.count }}</p>
+      <button @click="$store.commit(INCREMENT)">Click me</button>
+      <Footer/>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
@@ -18,10 +23,13 @@ export default {
   components: {Footer, Header},
   data() {
     return {
-      INCREMENT
-  };
-}
-}
-;
+      INCREMENT,
+    };
+  },
+};
 </script>
-
+<style lang="scss">
+body {
+  background-color: #0f0f0f !important;
+}
+</style>

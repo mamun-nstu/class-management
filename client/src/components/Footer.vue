@@ -1,13 +1,9 @@
-<template>
-I am a footer
-</template>
+<template><h1>I am a footer</h1></template>
 
 <script>
 export default {
-  name: "Footer"
-}
+  name: "Footer",
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

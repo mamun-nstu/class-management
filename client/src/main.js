@@ -1,12 +1,15 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from './routes';
-import store from './store';
-import './sass/index.scss';
+import Vue from 'vue'
+import App from './App.vue'
+import store from './store'
+import router from './router'
+import vuetify from './plugins/vuetify'
+import "./sass/index.scss";
 
-const app = createApp(App)
-// Make sure to _use_ the router instance to make the
-// whole app router-aware.
-app.use(router)
-app.use(store);
-app.mount('#app')
+Vue.config.productionTip = false
+
+new Vue({
+  store,
+  router,
+  vuetify,
+  render: h => h(App)
+}).$mount('#app')

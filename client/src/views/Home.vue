@@ -1,10 +1,10 @@
 <template>
-  <div>I am a header</div>
+  <div class="home">HOme page</div>
 </template>
 
 <script>
 export default {
-  name: "Header",
+  name: "Home",
 };
 </script>
 
