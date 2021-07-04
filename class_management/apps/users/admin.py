@@ -10,11 +10,11 @@ from users.models import (
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    fields = ('email', 'student_id', 'batch', 'password', 'first_name', 'last_name', 'full_name', 'date_joined')
+    fields = ('username', 'student_id', 'batch', 'full_name', 'date_joined')
 
 @admin.register(Instructor)
 class InstructorAdmin(admin.ModelAdmin):
-    fields = ('email', 'password', 'first_name', 'last_name', 'full_name', 'date_joined')
+    fields = ('username', 'full_name', 'date_joined')
 
 
 @admin.register(Batch)

@@ -8,7 +8,7 @@
           :color="success? 'success': 'danger'"
           dark
           dismissible
-      > {{ success? 'Success': 'Error occurred' }}
+      > {{ success ? 'Success' : 'Error occurred' }}
       </v-alert>
       <ValidationObserver v-slot="{invalid}" slim>
         <slot name="form"></slot>
@@ -59,7 +59,11 @@ export default {
       if (app.data.id) {
         backend_url = `${app.url}/${app.data.id}/`;
       }
-      return BackendApi.generic.send(backend_url, 'post', app.data)
+      return BackendApi.generic.send({
+        url: backend_url,
+        method: this.method,
+        data: app.data
+      })
           .then(res => {
             console.log(res);
             this.success = true;

@@ -1,5 +1,8 @@
 <template>
-  <div>I am a header</div>
+  <div>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <div>I am a header</div>
+  </div>
 </template>
 
 <script>

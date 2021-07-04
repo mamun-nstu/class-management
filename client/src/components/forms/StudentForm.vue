@@ -1,5 +1,10 @@
 <template>
-  <FormContainer :url="'/api/students/'" :data="student" :key="student.student_id">
+  <FormContainer
+      :url="'/api/students/'"
+      :data="student"
+      :key="student.student_id"
+      :method="update_data ? 'put': 'post'"
+  >
     <template #form>
       <div class="student register">
         <TextField
@@ -49,6 +54,12 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    // whether data should be created or updated
+    update_data: {
+      type: Boolean,
+      required: false,
+      default: false,
     }
   },
   mounted() {

@@ -9,6 +9,7 @@ class Course(models.Model):
     name = models.CharField(max_length=25, unique=True)
     active = models.BooleanField(default=True)
     instructors = models.ManyToManyField(Instructor, through='CourseInstructors')
+    students = models.ManyToManyField(Student, related_name='courses')
 
     def __str__(self):
         return f'{self.code}: {self.name}'
@@ -25,6 +26,7 @@ class CourseInstructors(models.Model):
     def __str__(self):
         return f'{self.course.code}: {self.instructor.full_name} ({self.batch})'
 
+
 class Notice(models.Model):
     message = models.TextField(max_length=20000)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -33,11 +35,16 @@ class Notice(models.Model):
     def __str__(self):
         return f"{self.student.student_id}: {self.issue_date}"
 
+
 class Attendance(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='attendances')
     date = models.DateField()
     present = models.BooleanField()
-    course_instructor = models.ForeignKey(CourseInstructors, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
+    instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.student.full_name}: {self.date}'
+
+    class Meta:
+        unique_together = ('date', 'course', 'student')

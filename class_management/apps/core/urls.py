@@ -1,13 +1,19 @@
 from django.urls import re_path
-from rest_framework_simplejwt import views
 
 from .views import (
-    MyTokenObtainPairView,
-    Test
+    AttendanceView,
+    CourseDeatail,
+    CourseList,
+    CreateSessionView
 )
 
 urlpatterns = [
-    re_path(r"^jwt/create/?", MyTokenObtainPairView.as_view(), name="jwt-create"),
-    re_path(r"^jwt/refresh/?", views.TokenRefreshView.as_view(), name="jwt-refresh"),
-    re_path(r"^jwt/verify/?", Test.as_view(), name="jwt-verify"),
+    re_path(r'^session/?$', CreateSessionView.as_view(), name='create_session'),
+    re_path(r"^attendances/batches/(?P<batch>[\d]+)/courses/(?P<course>[\d]+)/date/(?P<date>[\d-]+)/?$",
+            AttendanceView.as_view(),
+            name="attendance"),
+
+    re_path(r'^courses/(?P<pk>\d+)/$', CourseDeatail.as_view(), name='course_detail'),
+    re_path(r'^courses/(?P<pk>\d+)/$', CourseDeatail.as_view(), name='course_detail'),
+    re_path(r'^courses/$', CourseList.as_view(), name='course_list'),
 ]

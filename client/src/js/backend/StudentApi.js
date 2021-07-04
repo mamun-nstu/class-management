@@ -1,16 +1,7 @@
-import {BaseApi} from "./BaseApi";
+import {GenericApi} from "./GenericApi.js";
 
-export class StudentApi extends BaseApi{
-    static base_url() {
-        return "/api/students";
-    }
-    static get_all(){
-      return this.get(this.base_url());
-    }
-    static add(data){
-      return this.post(this.base_url(), data);
-    }
-    static add(data){
-      return this.post(this.base_url(), data);
-    }
+export class StudentApi extends GenericApi {
+  constructor(base_url) {
+    super(base_url);
+  }
 }

@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
-from users.models import Student
-from users.serializers import StudentSerializer
+from users.models import Student, Instructor, Batch
+from users.serializers import StudentSerializer, InstructorSerializer, BatchSerializer
 from rest_framework.mixins import (
     ListModelMixin,
     CreateModelMixin,
@@ -14,15 +14,54 @@ from rest_framework.mixins import (
     UpdateModelMixin
 )
 
+
 @permission_classes((permissions.AllowAny,))
 class StudentList(ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
+    def get_queryset(self):
+        req = self.request
+        batch = req.GET.get('batch')
+        course = req.GET.get('course')
+        query = {
+            'batch': batch,
+        }
+        if course:
+            query.update({'courses__in': [course]})
+        queryset = Student.objects.filter(**query)
+        return queryset
+
+
 @permission_classes((permissions.AllowAny,))
 class StudentDetail(RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+
+@permission_classes((permissions.AllowAny,))
+class InstructorList(ListCreateAPIView):
+    queryset = Instructor.objects.all()
+    serializer_class = InstructorSerializer
+
+
+@permission_classes((permissions.AllowAny,))
+class InstructorDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Instructor.objects.all()
+    serializer_class = InstructorSerializer
+
+
+@permission_classes((permissions.AllowAny,))
+class BatchList(ListCreateAPIView):
+    queryset = Batch.objects.all()
+    serializer_class = BatchSerializer
+
+
+@permission_classes((permissions.AllowAny,))
+class BatchDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Batch.objects.all()
+    serializer_class = BatchSerializer
+
 
 @permission_classes((permissions.AllowAny,))
 class StudentAPI(

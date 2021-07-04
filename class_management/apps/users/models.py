@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+
 # Create your models here.
 
 
@@ -9,6 +10,7 @@ class UserType:
     INSTRUCTOR = 'instructor'
     ADMIN = 'admin'
 
+
 CHOICES = (
     ('student', 'Student'),
     ('instructor', 'Instructor'),
@@ -16,8 +18,10 @@ CHOICES = (
 )
 
 
-class CustomUsers(User):
+class CustomUsers():
     full_name = models.CharField(max_length=255)
+    username = models.CharField(max_length=255)
+    date_joined = models.DateField(null=True, blank=True)
 
 
 class Batch(models.Model):
@@ -32,15 +36,10 @@ class Batch(models.Model):
     class Meta:
         verbose_name_plural = 'batches'
 
+
 class Student(CustomUsers):
     student_id = models.CharField(max_length=25, db_index=True, unique=True, default='1')
     batch = models.ForeignKey(Batch, on_delete=models.CASCADE, null=True, blank=True)
-
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-        self.type = UserType.STUDENT
-        self.set_password(raw_password=self.password)
-        super().save(force_insert, force_update, using, update_fields)
 
     def __str__(self):
         return f'{self.student_id}: {self.full_name}'
@@ -51,11 +50,6 @@ class Student(CustomUsers):
 
 
 class Instructor(CustomUsers):
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-        self.type = UserType.INSTRUCTOR
-        self.password = self.set_password(raw_password=self.password)
-        super().save(force_insert, force_update, using, update_fields)
 
     def __str__(self):
         return f'{self.email}: {self.full_name}'

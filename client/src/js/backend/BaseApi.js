@@ -5,32 +5,42 @@ export class BaseApi {
     this.base_url = base_url;
   }
 
-  send(url, method = 'GET', data) {
-    console.debug('Url', url);
-    return axios({
-      method,
-      url,
-      data,
-    });
+  send(config) {
+    config.method = config.method || 'GET';
+    config.url = config.url || this.base_url;
+    console.debug('Url', config.url);
+    return axios(config);
   }
 
-  get_all(url = this.base_url) {
-    return this.send(url, 'get');
+  get_all(url = this.base_url, query= {}) {
+    const config = {};
+    config.method = 'GET';
+    config.url = url;
+    config.query = query;
+    return this.send(config);
   }
 
-  post(url = this.base_url, data) {
-    return this.send(url, 'post', data);
+  post(config) {
+    config.method = 'POST';
+    config.url = config.url || this.base_url;
+    return this.send(config);
   }
   make_url(url, id){
     return `${url}/${id}`
   }
-  get(url = this.base_url, id) {
-    return this.send(this.make_url(url, id), 'get');
+  get(config) {
+    config.method = 'GET';
+    config.url = config.url || this.base_url;
+    return this.send(config);
   }
-  put(url = this.base_url, id, data) {
-    return this.send(this.make_url(url, id), 'put', data);
+  put(config) {
+    config.method = 'PUT';
+    config.url = config.url || this.base_url;
+    return this.send(config);
   }
-  delete(url = this.base_url, id) {
-    return this.send(this.make_url(url, id), 'delete');
+  delete(config) {
+    config.method = 'DELETE';
+    config.url = config.url || this.base_url;
+    return this.send(config);
   }
 }
