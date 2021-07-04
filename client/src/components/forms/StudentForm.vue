@@ -40,7 +40,7 @@ export default {
     FormContainer,
   },
   props: {
-    student_data: {
+    data: {
       type: Object,
       required: false,
       default: () => {}
@@ -52,7 +52,7 @@ export default {
     }
   },
   mounted() {
-    this.student = _.cloneDeep(this.student_data) || {};
+    this.student = _.cloneDeep(this.data) || {};
   },
   data: function () {
     return {
