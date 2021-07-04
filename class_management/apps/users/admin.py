@@ -11,7 +11,6 @@ from users.models import (
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
     fields = ('email', 'student_id', 'batch', 'password', 'first_name', 'last_name', 'full_name', 'date_joined')
-    pass
 
 @admin.register(Instructor)
 class InstructorAdmin(admin.ModelAdmin):
