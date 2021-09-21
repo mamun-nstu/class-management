@@ -26,7 +26,7 @@ export class BaseApi {
     return this.send(config);
   }
   make_url(url, id){
-    return `${url}/${id}`
+    return `${url}/${id}/`
   }
   get(config) {
     config.method = 'GET';

@@ -2,10 +2,10 @@
   <div class="student-attendance">
     <v-row class="align-center">
       <v-col class="col-2">
-        <p>{{ attendance_data.student.id }}</p>
+        <p>{{ attendance_data.student.student_id }}</p>
       </v-col>
       <v-col class="col-4">
-        <p>{{ attendance_data.student.first_name }}</p>
+        <p>{{ attendance_data.student.full_name }}</p>
       </v-col>
       <v-col class="col-2">
         <v-checkbox

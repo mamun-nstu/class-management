@@ -17,7 +17,7 @@
         </v-row>
 
       </v-row>
-      <v-btn @click="fetch_attendances" class="mb-8">Fetch</v-btn>
+      <!--      <v-btn @click="fetch_attendances" class="mb-8">Fetch</v-btn>-->
       <div class="student-attendances">
         <StudentAttendance
             v-for="attendance in attendances"
@@ -38,7 +38,7 @@ import StudentAttendance from "../components/StudentAttendance.vue";
 
 export default {
   name: "AttendanceView",
-  components: {StudentAttendance},
+  components: { StudentAttendance },
   data() {
     return {
       students: [],
@@ -49,6 +49,16 @@ export default {
       attendances: [],
       date: moment().format("YYYY-MM-DD"),
       instructor: 1
+    }
+  },
+  computed: {
+    fetchDependentVars() {
+      return `Course:${ this.selected_course }|Batch:${ this.selected_batch }|Date:${ this.date }`
+    }
+  },
+  watch: {
+    fetchDependentVars() {
+      this.fetch_attendances();
     }
   },
   beforeMount() {
@@ -63,7 +73,7 @@ export default {
     },
     update_attendances() {
       return BackendApi.generic.put({
-        url: `/api/attendances/batches/${this.selected_batch}/courses/${this.selected_course}/date/${this.date}`,
+        url: `/api/attendances/batches/${ this.selected_batch }/courses/${ this.selected_course }/date/${ this.date }`,
         data: this.attendances
       });
     },
@@ -86,7 +96,7 @@ export default {
     },
     fetch_attendances() {
       BackendApi.generic.get({
-        url: `/api/attendances/batches/${this.selected_batch}/courses/${this.selected_course}/date/${this.date}`
+        url: `/api/attendances/batches/${ this.selected_batch }/courses/${ this.selected_course }/date/${ this.date }`
       }).then(res => {
         this.attendances = res.data;
       })

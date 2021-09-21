@@ -1,10 +1,10 @@
 <template>
   <ValidationProvider :name="label" :rules="rules" v-slot="{errors}">
     <v-text-field
+        :value="value"
         @input="update"
-        @change="update"
+        @blur="do_nothing"
         :label="label"
-        v-bind="$attrs"
         :placeholder="placeholder"
         outlined
     ></v-text-field>
@@ -24,7 +24,9 @@ export default {
     update: function (val) {
       console.log('Here ', val);
       this.$emit("input", val);
-      this.$emit("change", val);
+    },
+    do_nothing: function () {
+
     }
   },
   props: {
@@ -43,7 +45,7 @@ export default {
       required: false,
       default: () => {}
     },
-    val: {
+    value: {
       type: String,
       required: false,
       default: ''

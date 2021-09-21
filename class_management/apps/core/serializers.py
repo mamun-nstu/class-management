@@ -13,8 +13,7 @@ from users.models import (
 class GenericStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        exclude = ['password']
-
+        fields = '__all__'
 
 
 class CourseSearializer(serializers.ModelSerializer):
@@ -22,6 +21,11 @@ class CourseSearializer(serializers.ModelSerializer):
         model = Course
         fields = '__all__'
 
+
+class GenericAttendanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attendance
+        fields = '__all__'
 
 class AttendanceSerializer(serializers.ModelSerializer):
     student = GenericStudentSerializer()

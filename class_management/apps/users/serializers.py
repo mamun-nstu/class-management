@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from rest_framework.exceptions import ValidationError
 from core.serializers import CourseSearializer, GenericStudentSerializer
 from users.models import (
     Student,
@@ -8,20 +8,7 @@ from users.models import (
 
 
 class StudentSerializer(GenericStudentSerializer):
-    courses = CourseSearializer(many=True)
-
-    def create(self, validated_data):
-        courses = validated_data.pop('courses', [])
-        instance = Student.objects.create(**validated_data)
-        # Assignment.objects.create(Order=order, Equipment=instance)
-        return instance
-
-    def update(self, instance, validated_data):
-        courses = validated_data.pop('courses', [])
-        for (key, value) in validated_data.items():
-            setattr(instance, key, value)
-        instance.save()
-        return instance
+    courses = CourseSearializer(many=True, required=False, default=[])
 
 
 class InstructorSerializer(serializers.ModelSerializer):

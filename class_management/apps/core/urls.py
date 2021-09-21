@@ -2,9 +2,10 @@ from django.urls import re_path
 
 from .views import (
     AttendanceView,
-    CourseDeatail,
+    CourseDetail,
     CourseList,
-    CreateSessionView
+    CreateSessionView,
+
 )
 
 urlpatterns = [
@@ -13,7 +14,7 @@ urlpatterns = [
             AttendanceView.as_view(),
             name="attendance"),
 
-    re_path(r'^courses/(?P<pk>\d+)/$', CourseDeatail.as_view(), name='course_detail'),
-    re_path(r'^courses/(?P<pk>\d+)/$', CourseDeatail.as_view(), name='course_detail'),
+    re_path(r'^courses/(?P<pk>\d+)/$', CourseDetail.as_view(), name='course_detail'),
+    re_path(r'^courses/(?P<pk>\d+)/$', CourseDetail.as_view(), name='course_detail'),
     re_path(r'^courses/$', CourseList.as_view(), name='course_list'),
 ]

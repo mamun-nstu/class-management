@@ -18,7 +18,7 @@ CHOICES = (
 )
 
 
-class CustomUsers():
+class CustomUsers(models.Model):
     full_name = models.CharField(max_length=255)
     username = models.CharField(max_length=255)
     date_joined = models.DateField(null=True, blank=True)
@@ -52,7 +52,7 @@ class Student(CustomUsers):
 class Instructor(CustomUsers):
 
     def __str__(self):
-        return f'{self.email}: {self.full_name}'
+        return f'{self.username}: {self.full_name}'
 
     class Meta:
         verbose_name = 'instructor'

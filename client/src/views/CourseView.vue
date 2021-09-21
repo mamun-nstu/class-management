@@ -1,33 +1,32 @@
 <template>
   <GenericView
-      title="Student"
-      :data="students"
+      title="Course"
+      :data="courses"
       :headers="headers"
-      @delete="delete_student"
+      @delete="delete_course"
   >
     <template #edit-data="edit_data">
-      <StudentForm :key="edit_data.edit_item.id" :data="edit_data.edit_item" :update_data="Boolean(edit_data.edit_item.id)"/>
+      <CourseForm :key="Math.random()" :data="edit_data.edit_item" :update_data="Boolean(edit_data.edit_item.id)"/>
     </template>
     <template #delete-data="{delete_item}">
-      <StudentForm :key="delete_item.id" :data="delete_item" :update_data="true" :view_only="true" />
+      <CourseForm :key="Math.random()" :data="delete_item" :update_data="true" :view_only="true" />
     </template>
   </GenericView>
 </template>
 
 <script>
 import GenericView from "./GenericView";
-import StudentForm from "../components/forms/StudentForm";
 import BackendApi from "../js/backend";
-import student_mixin from "../mixins/Student";
+import CourseForm from "../components/forms/CourseForm";
 import course_mixin from "../mixins/Course";
 
 export default {
-  name: "StudentView",
-  components: {StudentForm, GenericView},
-  mixins: [student_mixin, course_mixin],
+  name: "CourseView",
+  components: {CourseForm, GenericView},
+  mixins: [course_mixin],
   methods: {
-    delete_student(item) {
-      return BackendApi.student.delete(item.id)
+    delete_course(item) {
+      return BackendApi.course.delete(item.id)
           .then(res => {
             console.log(res);
             this.success = true;
@@ -41,12 +40,12 @@ data: function () {
   return {
     headers: [
       {
-        text: 'Student ID',
+        text: 'Code',
         align: 'start',
-        value: 'student_id',
+        value: 'code',
       },
-      {text: 'Email Address', value: 'username'},
-      {text: 'Full Name', value: 'full_name'},
+      {text: 'Name', value: 'name'},
+      {text: 'Active', value: 'active'},
       {text: 'Actions', value: 'actions', sortable: false},
     ],
   }

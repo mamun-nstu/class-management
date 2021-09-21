@@ -2,7 +2,6 @@
   <FormContainer
       :url="'/api/students/'"
       :data="student"
-      :key="student.student_id"
       :method="update_data ? 'put': 'post'"
   >
     <template #form>
@@ -18,16 +17,20 @@
             :rules="{required: true}"
         />
         <TextField
-            label="First Name"
-            v-model="student.first_name"
+            label="Full Name"
+            v-model="student.full_name"
             :rules="{required: true}"
         />
-        <TextField
-            label="Last Name"
-            v-model="student.last_name"
-            :rules="{required: true}"
+        <v-select
+            multiple
+            v-model="student.courses"
+            no-data-text="No course has been selected"
+            :chips="true"
+            :deletable-chips="true"
+            item-text="text"
+            item-value="value"
+            :items="courses"
         />
-
       </div>
     </template>
   </FormContainer>
@@ -48,7 +51,8 @@ export default {
     data: {
       type: Object,
       required: false,
-      default: () => {}
+      default: () => {
+      }
     },
     view_only: {
       type: Boolean,
@@ -63,11 +67,28 @@ export default {
     }
   },
   mounted() {
-    this.student = _.cloneDeep(this.data) || {};
+    this.student = _.cloneDeep(this.data) || {courses: []};
+    this.student.courses = this.student.courses || [];
+    console.log('Mounted', this.student.courses);
+  },
+  computed: {
+    courses() {
+      return this.$store.state.courses.data.map((course) => {
+        return {
+          text: course.code,
+          value: _.cloneDeep(course)
+        }
+      }).sort((a, b) => a.text < b.text ? -1 : 1);
+    },
+    selected_courses() {
+      const courses = _.cloneDeep(this.student.courses);
+      return courses.sort((a, b) => a.code < b.code ? -1 : 1);
+    }
   },
   data: function () {
     return {
       student: {
+        courses: []
       },
     }
   }

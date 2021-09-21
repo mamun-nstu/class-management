@@ -2,8 +2,11 @@ from rest_framework import permissions
 from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
+from core.models import Course, Attendance
+from core.serializers import AttendanceSerializer
 from users.models import Student, Instructor, Batch
 from users.serializers import StudentSerializer, InstructorSerializer, BatchSerializer
 from rest_framework.mixins import (
@@ -15,6 +18,17 @@ from rest_framework.mixins import (
 )
 
 
+class StudentDashBoardView:
+    @staticmethod
+    @api_view(['GET'])
+    @permission_classes((permissions.AllowAny,))
+    def get_course_attendances(request, student_id, course_id):
+        attendances = Attendance.objects.filter(course_id=course_id, student_id=student_id)
+        attendances = AttendanceSerializer(attendances, many=True)
+        return Response(attendances.data, status=200)
+
+
+
 @permission_classes((permissions.AllowAny,))
 class StudentList(ListCreateAPIView):
     queryset = Student.objects.all()
@@ -24,19 +38,54 @@ class StudentList(ListCreateAPIView):
         req = self.request
         batch = req.GET.get('batch')
         course = req.GET.get('course')
-        query = {
-            'batch': batch,
-        }
+        query = {}
+        if batch:
+            query.update({'batch': batch})
         if course:
             query.update({'courses__in': [course]})
         queryset = Student.objects.filter(**query)
         return queryset
+
+    def post(self, request, *args, **kwargs):
+        student_data = request.data
+        # nested data problem in serializer
+        courses = student_data.pop('courses', [])
+        serializer = self.serializer_class(data=student_data)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            validated_data.pop('courses', [])
+            student = Student.objects.create(**validated_data)
+            for course in courses:
+                student.courses.add(Course.objects.get(id = course.get('id')))
+
+            return Response(self.serializer_class(student).data, status=200)
+        return Response(serializer.errors, status=400)
 
 
 @permission_classes((permissions.AllowAny,))
 class StudentDetail(RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+    def put(self, request, *args, **kwargs):
+        id = kwargs.get('pk')
+        student_data = request.data
+        # nested data problem in serializer
+        courses = student_data.pop('courses', [])
+        student = Student.objects.get(id=id)
+        serializer = self.serializer_class(data=student_data, instance=student)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            validated_data.pop('courses', [])
+            for (key, value) in validated_data.items():
+                setattr(student, key, value)
+            student.save()
+            student.courses.clear()
+            for course in courses:
+                student.courses.add(Course.objects.get(id = course.get('id')))
+
+            return Response(self.serializer_class(student).data, status=200)
+        return Response(serializer.errors, status=400)
 
 
 @permission_classes((permissions.AllowAny,))
@@ -109,4 +158,3 @@ class StudentAPI(
     # def get(self, request):
     #     students = StudentSerializer(Student.objects.all().values(), many=True)
     #     return Response(students.data, status=200)
-

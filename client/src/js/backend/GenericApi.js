@@ -15,6 +15,12 @@ export class GenericApi extends BaseApi {
     });
   }
 
+  get(id) {
+    return super.get({
+      url: this.make_url(this.base_url, id)
+    });
+  }
+
   // add(data) {
   //   return this.post(base_url, data);
   // }

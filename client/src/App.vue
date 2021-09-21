@@ -1,26 +1,61 @@
 <template>
   <v-app>
-
+    <v-banner dense flat>{{ cur_route.title }}</v-banner>
     <v-main>
-      <Header/>
-      <router-link to="/">Home</router-link>
-      <router-link to="/about">About</router-link>
-      <router-view/>
-      <p>{{ $store.state.test_module.count }}</p>
-      <button @click="$store.commit(INCREMENT)">Click me</button>
+      <v-card>
+        <v-navigation-drawer
+          permanent
+          expand-on-hover
+          :app="true"
+          :bottom="true"
+        >
+          <v-list>
+            <v-list-item class="px-2">
+              <v-list-item-avatar>
+                <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
+              </v-list-item-avatar>
+            </v-list-item>
+
+            <v-list-item link>
+              <v-list-item-content>
+                <v-list-item-title class="text-h6">
+                  Sandra Adams
+                </v-list-item-title>
+                <v-list-item-subtitle>sandra_a88@gmail.com</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+
+          <v-divider></v-divider>
+
+          <v-list
+            nav
+            dense
+          >
+            <v-list-item @click.prevent="goto_route(route)" :key="route.name" v-for="route in routes" link>
+              <v-list-item-icon>
+                <v-icon>mdi-{{ route.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title> {{ route.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-navigation-drawer>
+      </v-card>
+      <router-view class="pt-10 mt-10"/>
       <Footer/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import {INCREMENT} from "./store/mutation_types";
-import Header from "./components/Header";
+import { INCREMENT } from "./store/mutation_types";
 import Footer from "./components/Footer";
 import BackendApi from "./js/backend";
+import { routes } from "./router";
+
 export default {
   name: "App",
-  components: {Footer, Header},
+  components: { Footer },
   beforeMount() {
     window.onSignIn = function (googleUser) {
       var profile = googleUser.getBasicProfile();
@@ -39,9 +74,20 @@ export default {
       })
     }
   },
+  computed: {
+    cur_route() {
+      return routes.filter((route) => route.name === this.$route.name)[0];
+    }
+  },
+  methods: {
+    goto_route(route) {
+      this.$router.push({ name: route.name });
+    }
+  },
   data() {
     return {
       INCREMENT,
+      routes,
     };
   },
 };

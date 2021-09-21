@@ -8,8 +8,8 @@ class Course(models.Model):
     code = models.CharField(max_length=12, db_index=True, unique=True)
     name = models.CharField(max_length=25, unique=True)
     active = models.BooleanField(default=True)
-    instructors = models.ManyToManyField(Instructor, through='CourseInstructors')
-    students = models.ManyToManyField(Student, related_name='courses')
+    instructors = models.ManyToManyField(Instructor, null=True, blank=True, through='CourseInstructors')
+    students = models.ManyToManyField(Student, null=True, blank=True, related_name='courses')
 
     def __str__(self):
         return f'{self.code}: {self.name}'
@@ -20,7 +20,7 @@ class CourseInstructors(models.Model):
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE, db_index=True)
     start = models.DateField()
     end = models.DateField(null=True, blank=True)
-    batch = models.OneToOneField(Batch, on_delete=models.CASCADE)
+    batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -41,7 +41,7 @@ class Attendance(models.Model):
     date = models.DateField()
     present = models.BooleanField()
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
-    instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
+    instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f'{self.student.full_name}: {self.date}'

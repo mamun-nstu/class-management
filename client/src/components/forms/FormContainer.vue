@@ -76,5 +76,7 @@ export default {
 </script>
 
 <style scoped>
-
+.form-container {
+  padding: 40px 0 40px 0;
+}
 </style>

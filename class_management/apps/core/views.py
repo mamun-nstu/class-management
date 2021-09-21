@@ -69,7 +69,7 @@ class AttendanceView(APIView):
             "date": date,
             "present": False,
             "course": course_id,
-            "instructor": 2
+            "instructor": 1
         }
 
     def get(self, request, batch, course, date):
@@ -90,7 +90,7 @@ class AttendanceView(APIView):
         return {
             "course_id": data.get("course"),
             "date": data.get("date"),
-            "instructor_id": data.get("instructor"),
+            # "instructor_id": data.get("instructor"),
             "student_id": data.get("student").get('id'),
             "present": data.get("present")
         }
@@ -114,9 +114,9 @@ class CourseList(ListCreateAPIView):
 
 
 @permission_classes((permissions.AllowAny,))
-class CourseDeatail(RetrieveUpdateDestroyAPIView):
+class CourseDetail(RetrieveUpdateDestroyAPIView):
     queryset = Course.objects.all()
-    serializer_class = CourseSearializer\
+    serializer_class = CourseSearializer
 
 
 @permission_classes((permissions.AllowAny,))
