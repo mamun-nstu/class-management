@@ -7,6 +7,8 @@
       <v-card-text>{{ student.username }}</v-card-text>
       <v-card-title>Full Name</v-card-title>
       <v-card-text>{{ student.full_name }}</v-card-text>
+      <v-card-title>Secret QR</v-card-title>
+      <QRCodeGenerator class="pl-4 pt-8 pb-8" :value="JSON.stringify(generalized_student)" :margin="10" />
       <v-card-title class="pt-4">Select a course to view attendance dashboard</v-card-title>
       <v-select
           outlined
@@ -38,9 +40,11 @@
 
 
 import BackendApi from "../js/backend";
+import QRCodeGenerator from "../components/QRCodeGenerator";
 
 export default {
   name: "StudentDashboardView",
+  components: { QRCodeGenerator },
   data() {
     return {
       student: {},
@@ -55,6 +59,14 @@ export default {
         console.log(prev, cur);
         return prev + (cur.present === true ? 1 : 0);
       }, 0);
+    },
+    generalized_student() {
+      return {
+        id: this.student.id,
+        student_id: this.student.student_id,
+        username: this.student.username,
+        full_name: this.student.full_name
+      }
     },
     attendance_percentange() {
       if (this.attendances.length === 0) return 0;
