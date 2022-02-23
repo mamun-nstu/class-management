@@ -1,0 +1,14 @@
+package-lock.json
+
+db.sqlite3
+node_modules/**
+*.log
+
+.vscode/
+*.pyc
+/static
+
+.idea
+*.idea
+
+venv/
