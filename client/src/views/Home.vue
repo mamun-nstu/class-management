@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    HOme page
+    <Header/>
     <StudentForm />
     <button @click="success">Refresh</button>
     <QRCodeReader :camera="camera" @success="success" />
@@ -10,9 +10,11 @@
 <script>
 import StudentForm from "../components/forms/StudentForm";
 import QRCodeReader from "../components/QRCodeReader";
+import Header from "../components/Header";
 export default {
   name: "Home",
   components: {
+    Header,
     QRCodeReader,
     StudentForm,
   },

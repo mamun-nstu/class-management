@@ -1,18 +1,18 @@
 <template>
   <v-app>
-    <v-banner dense flat>{{ cur_route.title }}</v-banner>
+    <Header />
     <v-main>
       <v-card>
-        <v-navigation-drawer
+        <v-navigation-drawer class="indigo lighten-4 white--text"
           permanent
           expand-on-hover
           :app="true"
           :bottom="true"
         >
-          <v-list>
+          <v-list >
             <v-list-item class="px-2">
-              <v-list-item-avatar>
-                <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
+              <v-list-item-avatar >
+                <v-img src="@/assets/proloy1.jpg"></v-img>
               </v-list-item-avatar>
             </v-list-item>
 
@@ -52,10 +52,11 @@ import { INCREMENT } from "./store/mutation_types";
 import Footer from "./components/Footer";
 import BackendApi from "./js/backend";
 import { routes } from "./router";
+import Header from "./components/Header";
 
 export default {
   name: "App",
-  components: { Footer },
+  components: {Header, Footer },
   beforeMount() {
     window.onSignIn = function (googleUser) {
       var profile = googleUser.getBasicProfile();

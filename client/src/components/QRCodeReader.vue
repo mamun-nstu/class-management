@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 400px; width: 550px;">
     <p class="error">{{ error }}</p>
 
     <p class="decode-result">Last result: <b>{{ result }}</b></p>
