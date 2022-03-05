@@ -1,6 +1,6 @@
 <template>
   <div>
-    <qrcode-vue :value="value" :size="size" :level="level" render-as="svg" />
+    <qrcode-vue :id="id" :value="value" :size="size" :level="level" render-as="canvas" />
   </div>
 </template>
 
@@ -11,6 +11,11 @@ export default {
   name: 'QRCodeGenerator',
   components: { QrcodeVue },
   props: {
+    id: {
+      type: String,
+      required: false,
+      default: 'qrcode'
+    },
     value: {
       type: String,
       required: true

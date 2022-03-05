@@ -1,37 +1,94 @@
 <template>
   <div class="attendances">
     <v-container class="student-dashboard">
-      <v-card-title>Student ID</v-card-title>
-      <v-card-text>{{ student.student_id }}</v-card-text>
-      <v-card-title>Username/Email Address</v-card-title>
-      <v-card-text>{{ student.username }}</v-card-text>
-      <v-card-title>Full Name</v-card-title>
-      <v-card-text>{{ student.full_name }}</v-card-text>
-      <v-card-title>Secret QR</v-card-title>
-      <QRCodeGenerator class="pl-4 pt-8 pb-8" :value="JSON.stringify(generalized_student)" :margin="10" />
-      <v-card-title class="pt-4">Select a course to view attendance dashboard</v-card-title>
-      <v-select
-          outlined
-          dense
-          class="col-3 pt-4"
-          v-model="selected_course"
-          no-data-text="No course has been selected"
-          item-text="text"
-          item-value="value"
-          :items="courses"
-      />
-      <v-btn @click.prevent="get_attendances">Get Attendances</v-btn>
-      <div v-if="attendances.length">
-        <v-card-title>{{ selected_course.name }}</v-card-title>
-        <v-list>
-          <v-list-item :key="attendance.id" v-for="attendance in attendances">
-            {{ attendance.date }} -> {{ attendance.present ? 'present' : 'absent' }}
-          </v-list-item>
-        </v-list>
-        <v-card-title>Total Classes: {{ attendances.length }}</v-card-title>
-        <v-card-title>Present counts: {{ presents }}</v-card-title>
-        <v-card-title>Present Percentage: {{ attendance_percentange }}%</v-card-title>
-      </div>
+      <v-row>
+        <v-col class="col-md-4 full-height">
+          <v-card class="full-height">
+            <v-card-title class="card-heading">Student Details</v-card-title>
+            <v-card-text>
+              <div class="student-detail">
+                <p class="name">{{ student.full_name }}</p>
+                <p>Student ID: {{ student.student_id }}</p>
+                <p>Email: {{ student.username }}</p>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col class="col-md-8 full-height">
+          <v-card>
+            <v-card-title class="card-heading">Attendance Summary</v-card-title>
+            <v-card-text class="m-0 p-0">
+              <StudentAttendanceSummary :attendances="attendance_summary"/>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-divider></v-divider>
+      <v-row class="full-height">
+        <v-col class="col-md-4">
+          <v-card-title class="card-heading">Secret QR Code</v-card-title>
+          <v-card-text>
+            <QRCodeGenerator id="qrcode" :size="250" class="pt-5" :value="JSON.stringify(generalized_student)"/>
+            <div class="d-flex justify-center">
+              <a download="qrcode.png" href="" @click="download_image" class="text-button">Download</a>
+            </div>
+          </v-card-text>
+        </v-col>
+        <v-col class="col-md-8">
+          <v-card>
+            <v-card-title class="card-heading">Attendance Details</v-card-title>
+            <v-card-text class="pb-3">
+              <div class="d-flex">
+                <span class="label pr-5">Select Course</span>
+                <v-select
+                  outlined
+                  dense
+                  class="col-3 pt-4"
+                  v-model="selected_course"
+                  no-data-text="No course has been selected"
+                  item-text="text"
+                  item-value="value"
+                  :items="courses"
+                />
+              </div>
+              <div class="d-flex justify-center p-4">
+                <v-btn class="primary" @click.prevent="get_attendances">Get Attendances</v-btn>
+              </div>
+              <div v-if="attendances.length">
+                <v-simple-table>
+                  <template v-slot:default>
+                    <thead>
+                    <tr>
+                      <th class="text-left">
+                        Date
+                      </th>
+                      <th class="text-left">
+                        Present Status
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr
+                      v-for="attendance in attendances"
+                      :key="attendance.id"
+                    >
+                      <td>{{ attendance.date }}</td>
+                      <td>{{ attendance.present ? 'Present' : 'Absent' }}</td>
+                    </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+                <v-card class="pt-3 pb-3 m-2">
+                  <v-card-text><b>Total Classes:</b> {{ attendances.length }}</v-card-text>
+                  <v-card-text><b>Present counts:</b> {{ presents }}</v-card-text>
+                  <v-card-text><b>Present Percentage:</b> {{ attendance_percentange }}%</v-card-text>
+                </v-card>
+              
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -41,15 +98,17 @@
 
 import BackendApi from "../js/backend";
 import QRCodeGenerator from "../components/QRCodeGenerator";
+import StudentAttendanceSummary from "../components/StudentAttendanceSummary";
 
 export default {
   name: "StudentDashboardView",
-  components: { QRCodeGenerator },
+  components: { StudentAttendanceSummary, QRCodeGenerator },
   data() {
     return {
       student: {},
       courses: [],
       attendances: [],
+      attendance_summary: [],
       selected_course: '',
     }
   },
@@ -70,42 +129,58 @@ export default {
     },
     attendance_percentange() {
       if (this.attendances.length === 0) return 0;
-      return (this.presents/this.attendances.length * 100).toFixed(2);
+      return (this.presents / this.attendances.length * 100).toFixed(2);
     }
   },
   beforeMount() {
     return BackendApi.student.get(1)
-        .then(res => {
-          console.log(res);
-          this.success = true;
-          this.student = res.data;
-          this.courses = this.student.courses;
-          this.courses = this.courses.map((course) => {
-            return {
-              text: course.name,
-              value: course
-            }
-          });
-          this.selected_course = this.student.courses.length ? this.student.courses[0] : {};
-        }).catch(err => {
-          console.error(err);
-        }).finally(() => this.show_confirm = true);
+      .then(res => {
+        console.log(res);
+        this.success = true;
+        this.student = res.data;
+        this.get_attendance_summary(this.student.id);
+        this.courses = this.student.courses;
+        this.courses = this.courses.map((course) => {
+          return {
+            text: course.name,
+            value: course
+          }
+        });
+        this.selected_course = this.student.courses.length ? this.student.courses[0] : {};
+      }).catch(err => {
+        console.error(err);
+      }).finally(() => this.show_confirm = true);
   },
   methods: {
+    download_image(event) {
+      const el = event.srcElement;
+      console.log(el);
+      const canvas = document.querySelector('#qrcode > canvas');
+      const img = canvas.toDataURL("image/png");
+      el.href = img;
+    },
     get_attendances() {
-      console.log('Here attendances');
       return BackendApi.student.get_attendances(this.student.id, this.selected_course.id)
-          .then(res => {
-            this.attendances = res.data;
-          }).catch((err) => {
-            console.error(err);
-          })
+        .then(res => {
+          this.attendances = res.data;
+        }).catch((err) => {
+          console.error(err);
+        })
+    },
+    get_attendance_summary() {
+      return BackendApi.student.get_attendance_summary(this.student.id)
+        .then(res => {
+          console.log(res);
+          this.attendance_summary = res.data;
+        }).catch((err) => {
+          console.error(err);
+        })
     }
   },
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 .v-card__title {
   font-size: 1.10rem;
@@ -118,4 +193,28 @@ export default {
   padding-top: 0;
   padding-bottom: 0;
 }
+
+.student-detail {
+  padding: 15px;
+  margin: auto;
+  font-weight: 400;
+  text-align: center;
+  
+  .name {
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+}
+
+.label {
+  font-size: 16px;
+  font-weight: 700;
+  padding-top: 25px;
+}
+
+.text-button {
+  font-size: 18px !important;
+}
+
 </style>

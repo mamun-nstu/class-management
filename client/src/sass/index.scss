@@ -1,1 +1,13 @@
 @import "components";
+
+.card-heading {
+  color: white;
+  background-color: #1976D2;
+  text-align: center;
+  width: 100%;
+  justify-content: center;
+}
+
+.full-height {
+  height: 100% !important;
+}

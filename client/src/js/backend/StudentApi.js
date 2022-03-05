@@ -10,4 +10,10 @@ export class StudentApi extends GenericApi {
       method: 'GET',
     });
   }
+  get_attendance_summary(student_id) {
+    return super.send({
+      url: `${this.base_url}/${student_id}/attendance_summary/`,
+      method: 'GET',
+    });
+  }
 }

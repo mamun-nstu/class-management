@@ -1,8 +1,8 @@
 <template>
-  <div style="height: 400px; width: 550px;">
+  <div>
     <p class="error">{{ error }}</p>
 
-    <p class="decode-result">Last result: <b>{{ result }}</b></p>
+<!--    <p class="decode-result">Last result: <b>{{ result }}</b></p>-->
     <qrcode-stream :camera="camera" @decode="onDecode" :track="decorate" @init="onInit"/>
   </div>
 </template>

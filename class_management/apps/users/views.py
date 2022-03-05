@@ -17,7 +17,6 @@ from rest_framework.mixins import (
     UpdateModelMixin
 )
 
-
 class StudentDashBoardView:
     @staticmethod
     @api_view(['GET'])
@@ -26,6 +25,34 @@ class StudentDashBoardView:
         attendances = Attendance.objects.filter(course_id=course_id, student_id=student_id)
         attendances = AttendanceSerializer(attendances, many=True)
         return Response(attendances.data, status=200)
+
+    @staticmethod
+    def get_course_title(course_code, course_name):
+        return f'{course_code} - {course_name}'
+    
+    @staticmethod
+    @api_view(['GET'])
+    @permission_classes((permissions.AllowAny,))
+    def get_attendance_summary(request, student_id):
+        attendances = Attendance.objects.filter(student_id=student_id).prefetch_related('course')
+        total_classes = {}
+        total_attendances = {}
+        for attendance in attendances:
+            course_title = StudentDashBoardView.get_course_title(attendance.course.code, attendance.course.name)
+            total_classes[course_title] = total_classes.get(course_title, 0) + 1
+            total_attendances[course_title] = total_attendances.get(course_title, 0) + (1 if attendance.present else 0)
+        
+        res = []
+        for key, val in total_classes.items():
+            total_class = val or 0
+            total_present = total_attendances.get(key, 0)
+            res.append({
+                'course_title': key,
+                'total_class': total_class,
+                'total_present': total_present,
+                'percentage': round(total_present/total_class, 2)
+            })
+        return Response(res, status=200)
 
 
 

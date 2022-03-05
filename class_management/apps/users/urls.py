@@ -20,6 +20,11 @@ urlpatterns = [
         StudentDashBoardView.get_course_attendances,
         name='student_dashboard_course_attendances'
     ),
+    re_path(
+        r'^students/(?P<student_id>\d+)/attendance_summary/$',
+        StudentDashBoardView.get_attendance_summary,
+        name='student_dashboard_attendance_summary'
+    ),
     re_path(r'^students/$', StudentList.as_view(), name='student_list'),
     re_path(r'^instructors/(?P<pk>\d+)/$', InstructorDetail.as_view(), name='instructor_detail'),
     re_path(r'^instructors/$', InstructorList.as_view(), name='instructor_list'),
