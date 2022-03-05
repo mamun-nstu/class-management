@@ -3,9 +3,10 @@ from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
+from django.utils import timezone
 from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
-from core.models import Course, Attendance
+from core.models import Course, Attendance, CourseInstructors
 from core.serializers import AttendanceSerializer
 from users.models import Student, Instructor, Batch
 from users.serializers import StudentSerializer, InstructorSerializer, BatchSerializer
@@ -125,6 +126,34 @@ class InstructorList(ListCreateAPIView):
 class InstructorDetail(RetrieveUpdateDestroyAPIView):
     queryset = Instructor.objects.all()
     serializer_class = InstructorSerializer
+    
+    def put(self, request, *args, **kwargs):
+        id = kwargs.get('pk')
+        instructor_data = request.data
+        # nested data problem in serializer
+        courses = instructor_data.pop('courses', [])
+        instructor = Instructor.objects.get(id=id)
+        serializer = self.serializer_class(data=instructor_data, instance=instructor)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            validated_data.pop('courses', [])
+            for (key, value) in validated_data.items():
+                setattr(instructor, key, value)
+            instructor.save()
+            instructor.courses.clear()
+            batch = Batch.objects.all()
+            batch = batch[0]
+            for course in courses:
+                ci = CourseInstructors(
+                    course=Course.objects.get(id = course.get('id')),
+                    instructor=instructor,
+                    batch=batch,
+                    start=timezone.now()
+                )
+                ci.save()
+
+            return Response(self.serializer_class(instructor).data, status=200)
+        return Response(serializer.errors, status=400)
 
 
 @permission_classes((permissions.AllowAny,))

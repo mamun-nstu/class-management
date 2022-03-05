@@ -8,7 +8,7 @@ class Course(models.Model):
     code = models.CharField(max_length=12, db_index=True, unique=True)
     name = models.CharField(max_length=25, unique=True)
     active = models.BooleanField(default=True)
-    instructors = models.ManyToManyField(Instructor, null=True, blank=True, through='CourseInstructors')
+    instructors = models.ManyToManyField(Instructor, null=True, blank=True, through='CourseInstructors', related_name='courses')
     students = models.ManyToManyField(Student, null=True, blank=True, related_name='courses')
 
     def __str__(self):

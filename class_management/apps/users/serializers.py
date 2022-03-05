@@ -12,9 +12,11 @@ class StudentSerializer(GenericStudentSerializer):
 
 
 class InstructorSerializer(serializers.ModelSerializer):
+    courses = CourseSearializer(many=True, required=False, default=[])
+    
     class Meta:
         model = Instructor
-        fields = ['id', 'username', 'first_name', 'last_name']
+        fields = ['id', 'username', 'full_name', 'courses']
 
 
 class BatchSerializer(serializers.ModelSerializer):
