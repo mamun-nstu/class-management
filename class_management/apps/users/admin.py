@@ -10,11 +10,14 @@ from users.models import (
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    fields = ('username', 'student_id', 'batch', 'full_name', 'date_joined')
+    fields = ('username', 'student_id', 'batch', 'full_name', 'date_joined', 'image_tag', 'image')
+    readonly_fields = ['image_tag']
+
 
 @admin.register(Instructor)
 class InstructorAdmin(admin.ModelAdmin):
-    fields = ('username', 'full_name', 'date_joined')
+    fields = ('username', 'full_name', 'date_joined',  'image_tag', 'image')
+    readonly_fields = ['image_tag']
 
 
 @admin.register(Batch)

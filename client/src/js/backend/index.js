@@ -10,6 +10,7 @@ class BackendApi {
     this.batch = new GenericApi("/api/batches");
     this.course = new GenericApi("/api/courses");
     this.instructor = new InstructorApi("/api/instructors");
+    this.others = new BaseApi('');
   }
 }
 

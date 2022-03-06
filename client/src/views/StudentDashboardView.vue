@@ -7,6 +7,7 @@
             <v-card-title class="card-heading">Student Details</v-card-title>
             <v-card-text>
               <div class="student-detail">
+                <img height="100%" width="100%" v-if="student.image" :src="student.image" :alt="student.full_name" />
                 <p class="name">{{ student.full_name }}</p>
                 <p>Student ID: {{ student.student_id }}</p>
                 <p>Email: {{ student.username }}</p>

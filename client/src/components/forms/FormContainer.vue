@@ -22,6 +22,7 @@
 <script>
 import {ValidationObserver} from 'vee-validate';
 import BackendApi from '../../js/backend';
+import _ from 'lodash';
 
 export default {
   name: "FormContainer",
@@ -52,17 +53,35 @@ export default {
     }
   },
   methods: {
-    submit() {
+    async submit() {
       console.log('Submitting to ' + this.url);
       const app = this;
       let backend_url = app.url;
       if (app.data.id) {
         backend_url = `${app.url}/${app.data.id}/`;
       }
+      const req_data = _.cloneDeep(app.data);
+      if(app.data.image) {
+        const form_data = new FormData();
+        form_data.append('files', app.data.image);
+        form_data.append('file_name', app.data.full_name || 'unknown_user');
+        try {
+          let res = await BackendApi.others.post({
+            data: form_data,
+            url: '/api/upload-user-img/'
+          });
+          res = res.data;
+          req_data.image = res.upload_url;
+        } catch (e) {
+          this.show_confirm = true
+          console.error(e);
+          return;
+        }
+      }
       return BackendApi.generic.send({
         url: backend_url,
         method: this.method,
-        data: app.data
+        data: req_data
       })
           .then(res => {
             console.log(res);

@@ -135,3 +135,22 @@ class CreateSessionView(APIView):
             # Invalid token
             pass
         return Response(status=400)
+    
+from django.core.files.storage import FileSystemStorage
+
+
+@permission_classes((permissions.AllowAny,))
+class UploadUserImage(APIView):
+    img_location = f'uploads/user-imgs'
+    def post(self, request):
+        file_obj = request.FILES['files']
+        file_name = request.data.get('file_name', '')
+        if file_name:
+            file_name += '.' + file_obj.name.split('.')[-1]
+        else:
+            file_name = file_obj.name
+        img_location = f'{settings.MEDIA_ROOT}/{self.img_location}'
+        fs = FileSystemStorage(img_location)
+        res = fs.save(file_name, file_obj)
+        res = f'{self.img_location}/{res}'
+        return Response({'upload_url': res}, status=200)

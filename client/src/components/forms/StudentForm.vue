@@ -6,6 +6,10 @@
   >
     <template #form>
       <div class="student register">
+        <div class="d-flex justify-center mb-6">
+          <img :style="{maxHeight: '250px', maxWidth: '250px'}" height="100%" width="100%" v-if="data.image"
+               :src="data.image" :alt="data.full_name"/>
+        </div>
         <TextField
             label="Student ID"
             v-model="student.student_id"
@@ -21,10 +25,20 @@
             v-model="student.full_name"
             :rules="{required: true}"
         />
+        <v-file-input
+          v-model="student.image"
+          accept="image/png, image/jpeg, image/bmp"
+          label="Upload image"
+          show-size
+          outlined
+          dense
+          prepend-icon=""
+      ></v-file-input>
         <v-select
             multiple
             v-model="student.courses"
-            no-data-text="No course has been selected"
+            no-data-text="No course found"
+            placeholder="Select courses"
             :chips="true"
             :deletable-chips="true"
             item-text="text"
@@ -69,6 +83,7 @@ export default {
   mounted() {
     this.student = _.cloneDeep(this.data) || {courses: []};
     this.student.courses = this.student.courses || [];
+    this.student.image = null;
     console.log('Mounted', this.student.courses);
   },
   computed: {

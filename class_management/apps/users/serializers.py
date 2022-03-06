@@ -16,7 +16,7 @@ class InstructorSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Instructor
-        fields = ['id', 'username', 'full_name', 'courses']
+        fields = ['id', 'username', 'full_name', 'courses', 'image']
 
 
 class BatchSerializer(serializers.ModelSerializer):

@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.html import mark_safe
 
 
 # Create your models here.
@@ -22,6 +24,15 @@ class CustomUsers(models.Model):
     full_name = models.CharField(max_length=255)
     username = models.CharField(max_length=255)
     date_joined = models.DateField(null=True, blank=True)
+    image = models.ImageField(null=True, blank=True, upload_to='uploads/user-imgs/')
+
+    def image_tag(self):
+        image = self.image
+        if not image:
+            return
+        return mark_safe(f'<img src="{settings.MEDIA_URL}{image}" width="150" height="150" alt="Image not available" />')
+
+    image_tag.short_description = 'Image Preview'
 
 
 class Batch(models.Model):

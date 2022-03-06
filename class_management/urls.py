@@ -13,8 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, re_path
+from django.conf import settings
 
 admin.autodiscover()
 admin.site.enable_nav_sidebar = False
@@ -26,4 +28,4 @@ urlpatterns = [
     re_path(r'^api/', include('core.urls')),
     re_path(r'^status/', include('status.urls', namespace='status')),
     re_path(r'^api/', include('users.urls', namespace='users'))
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

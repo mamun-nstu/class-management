@@ -7,6 +7,10 @@
   >
     <template #form>
       <div class="instructor register">
+        <div class="d-flex justify-center mb-6">
+          <img :style="{maxHeight: '250px', maxWidth: '250px'}" height="100%" width="100%" v-if="data.image"
+               :src="data.image" :alt="data.full_name"/>
+        </div>
         <TextField
             label="Username/Email Address"
             v-model="instructor.username"
@@ -20,13 +24,23 @@
         <v-select
           multiple
           v-model="instructor.courses"
-          no-data-text="No course has been selected"
+          no-data-text="No course found"
+          placeholder="Select courses"
           :chips="true"
           :deletable-chips="true"
           item-text="text"
           item-value="value"
           :items="courses"
         />
+        <v-file-input
+          v-model="instructor.image"
+          accept="image/png, image/jpeg, image/bmp"
+          label="Upload image"
+          show-size
+          outlined
+          dense
+          prepend-icon=""
+      ></v-file-input>
       </div>
     </template>
   </FormContainer>
@@ -62,6 +76,8 @@ export default {
   },
   mounted() {
     this.instructor = _.cloneDeep(this.data) || {};
+    this.instructor.image = null;
+    
   },
   computed: {
     courses() {

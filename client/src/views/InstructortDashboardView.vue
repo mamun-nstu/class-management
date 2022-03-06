@@ -6,29 +6,31 @@
           <v-card class="full-height">
             <v-card-title class="card-heading">Instructor Details</v-card-title>
             <v-card-text>
-              <div class="student-detail">
+              <div class="instructor-detail">
+                <img height="100%" width="100%" v-if="instructor.image" :src="instructor.image" :alt="instructor.full_name" />
                 <p class="name">{{ instructor.full_name }}</p>
                 <p>Email: {{ instructor.username }}</p>
               </div>
             </v-card-text>
-            <div class="mt-3">
+            <v-divider class="mb-1"></v-divider>
+            <div>
               <v-btn
                 width="100%"
-                style="{borderRadius: 0!important;}"
+                :style="{borderRadius: '0!important'}"
                 :class="cur_tab === 'running_courses'? 'primary' : '' "
                 @click="cur_tab='running_courses'"
               >Running Courses
               </v-btn>
               <v-btn
                 width="100%"
-                style="{borderRadius: 0!important;}"
+                :style="{borderRadius: '0!important'}"
                 :class="cur_tab === 'student_attendance_detail'? 'primary' : ''"
                 @click="cur_tab='student_attendance_detail'"
               >Student Attendance Detail
               </v-btn>
               <v-btn
                 width="100%"
-                style="{borderRadius: 0!important;}"
+                :style="{borderRadius: '0!important'}"
                 :class="cur_tab === 'attendance_summary'? 'primary' : ''"
                 @click="cur_tab='attendance_summary'"
               >Attendance Summary
@@ -292,7 +294,7 @@ export default {
   padding-bottom: 0;
 }
 
-.student-detail {
+.instructor-detail {
   padding: 15px;
   margin: auto;
   font-weight: 400;

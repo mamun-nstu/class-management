@@ -5,6 +5,7 @@ from .views import (
     CourseDetail,
     CourseList,
     CreateSessionView,
+    UploadUserImage,
 
 )
 
@@ -17,4 +18,5 @@ urlpatterns = [
     re_path(r'^courses/(?P<pk>\d+)/$', CourseDetail.as_view(), name='course_detail'),
     re_path(r'^courses/(?P<pk>\d+)/$', CourseDetail.as_view(), name='course_detail'),
     re_path(r'^courses/$', CourseList.as_view(), name='course_list'),
+    re_path(r'^upload-user-img/$', UploadUserImage.as_view(), name='upload_user_img'),
 ]

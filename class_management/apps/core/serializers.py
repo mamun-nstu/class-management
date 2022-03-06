@@ -11,6 +11,7 @@ from users.models import (
 
 
 class GenericStudentSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Student
         fields = '__all__'
