@@ -41,13 +41,14 @@
 
           </v-flex>
 
+          <v-devider></v-devider>
+
+
 
         </v-layout>
 
+
   </div>
-
-
-
 
 
 </template>

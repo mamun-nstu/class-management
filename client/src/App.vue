@@ -3,7 +3,7 @@
     <Header />
     <v-main>
       <v-card>
-        <v-navigation-drawer class="indigo lighten-4 white--text"
+        <v-navigation-drawer class="blue darken-3 white--text"
           permanent
           expand-on-hover
           :app="true"
@@ -18,10 +18,10 @@
 
             <v-list-item link>
               <v-list-item-content>
-                <v-list-item-title class="text-h6">
+                <v-list-item-title class="text-h6 white--text">
                   Sandra Adams
                 </v-list-item-title>
-                <v-list-item-subtitle>sandra_a88@gmail.com</v-list-item-subtitle>
+                <v-list-item-subtitle class="white--text">sandra_a88@gmail.com</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -31,6 +31,7 @@
           <v-list
             nav
             dense
+            class="white--text"
           >
             <v-list-item @click.prevent="goto_route(route)" :key="route.name" v-for="route in routes" link>
               <v-list-item-icon>
