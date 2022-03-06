@@ -1,6 +1,7 @@
 import {BaseApi} from "./BaseApi";
 import {StudentApi} from "./StudentApi.js";
 import {GenericApi} from "./GenericApi.js";
+import { InstructorApi } from "./InstructorApi";
 
 class BackendApi {
   constructor() {
@@ -8,7 +9,7 @@ class BackendApi {
     this.student = new StudentApi("/api/students");
     this.batch = new GenericApi("/api/batches");
     this.course = new GenericApi("/api/courses");
-    this.instructor = new BaseApi("/api/instructors");
+    this.instructor = new InstructorApi("/api/instructors");
   }
 }
 

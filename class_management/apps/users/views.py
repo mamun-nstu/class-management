@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from django.utils import timezone
 from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
-
+from django.db.models import Avg, Count, Min, Sum, F, IntegerField
 from core.models import Course, Attendance, CourseInstructors
 from core.serializers import AttendanceSerializer
 from users.models import Student, Instructor, Batch
@@ -18,6 +18,7 @@ from rest_framework.mixins import (
     UpdateModelMixin
 )
 
+
 class StudentDashBoardView:
     @staticmethod
     @api_view(['GET'])
@@ -26,7 +27,7 @@ class StudentDashBoardView:
         attendances = Attendance.objects.filter(course_id=course_id, student_id=student_id)
         attendances = AttendanceSerializer(attendances, many=True)
         return Response(attendances.data, status=200)
-
+    
     @staticmethod
     def get_course_title(course_code, course_name):
         return f'{course_code} - {course_name}'
@@ -51,17 +52,16 @@ class StudentDashBoardView:
                 'course_title': key,
                 'total_class': total_class,
                 'total_present': total_present,
-                'percentage': round(total_present/total_class, 2)
+                'percentage': round(total_present / total_class, 2)
             })
         return Response(res, status=200)
-
 
 
 @permission_classes((permissions.AllowAny,))
 class StudentList(ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-
+    
     def get_queryset(self):
         req = self.request
         batch = req.GET.get('batch')
@@ -73,7 +73,7 @@ class StudentList(ListCreateAPIView):
             query.update({'courses__in': [course]})
         queryset = Student.objects.filter(**query)
         return queryset
-
+    
     def post(self, request, *args, **kwargs):
         student_data = request.data
         # nested data problem in serializer
@@ -84,8 +84,8 @@ class StudentList(ListCreateAPIView):
             validated_data.pop('courses', [])
             student = Student.objects.create(**validated_data)
             for course in courses:
-                student.courses.add(Course.objects.get(id = course.get('id')))
-
+                student.courses.add(Course.objects.get(id=course.get('id')))
+            
             return Response(self.serializer_class(student).data, status=200)
         return Response(serializer.errors, status=400)
 
@@ -94,7 +94,7 @@ class StudentList(ListCreateAPIView):
 class StudentDetail(RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-
+    
     def put(self, request, *args, **kwargs):
         id = kwargs.get('pk')
         student_data = request.data
@@ -110,8 +110,8 @@ class StudentDetail(RetrieveUpdateDestroyAPIView):
             student.save()
             student.courses.clear()
             for course in courses:
-                student.courses.add(Course.objects.get(id = course.get('id')))
-
+                student.courses.add(Course.objects.get(id=course.get('id')))
+            
             return Response(self.serializer_class(student).data, status=200)
         return Response(serializer.errors, status=400)
 
@@ -145,15 +145,76 @@ class InstructorDetail(RetrieveUpdateDestroyAPIView):
             batch = batch[0]
             for course in courses:
                 ci = CourseInstructors(
-                    course=Course.objects.get(id = course.get('id')),
+                    course=Course.objects.get(id=course.get('id')),
                     instructor=instructor,
                     batch=batch,
                     start=timezone.now()
                 )
                 ci.save()
-
+            
             return Response(self.serializer_class(instructor).data, status=200)
         return Response(serializer.errors, status=400)
+
+
+class InstructorDashboardView:
+    @staticmethod
+    @api_view(['GET'])
+    @permission_classes((permissions.AllowAny,))
+    def get_attendances(request, instructor_id, course_id):
+        total_classes = Attendance.objects.filter(course_id=course_id).values('date').distinct().count()
+        attendances = Attendance.objects.filter(course_id=course_id).prefetch_related('student')
+        student_info = {}
+        total_present = {}
+        for attendance in attendances:
+            student = attendance.student
+            student_info[student.id] = student
+            total_present[student.id] = total_present.get(student.id, 0) + (1 if attendance.present else 0)
+        res = []
+        
+        for _id, student in student_info.items():
+            presents = total_present.get(_id, 0)
+            res.append({
+                'student_id': student.student_id,
+                'student_name': student.full_name,
+                'total_present': presents,
+                'percentage': round(presents / total_classes * 100, 2),
+                'total_classes': total_classes
+            })
+        return Response(res, status=200)
+    
+
+    @staticmethod
+    @api_view(['GET'])
+    @permission_classes((permissions.AllowAny,))
+    def get_course_students(request, instructor_id, course_id):
+        students = Student.objects.filter(courses__id=course_id)
+        return Response(StudentSerializer(instance=students, many=True).data, status=200)
+    
+    @staticmethod
+    @api_view(['GET'])
+    @permission_classes((permissions.AllowAny,))
+    def get_course_student_summary(request, instructor_id, course_id, student_id):
+        attendances = Attendance.objects.filter(student_id=student_id, course_id=course_id)
+        total_classes = attendances.count()
+        res = []
+        present = 0
+        for attendance in attendances:
+            res.append({
+                'date': attendance.date,
+                'present': attendance.present
+            })
+            present += 1 if attendance.present else 0
+            
+        percentage = 0
+        if total_classes:
+            percentage = round(present / total_classes * 100, 2)
+        return Response({
+            'classes': res,
+            'total_classes': total_classes,
+            'total_present': present,
+            'percentage': percentage
+        }, status=200
+        )
 
 
 @permission_classes((permissions.AllowAny,))
@@ -179,22 +240,22 @@ class StudentAPI(
 ):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-
+    
     def get_object(self, pk):
         try:
             return Student.objects.get(pk=pk)
         except Student.DoesNotExist:
             raise Response('student not found', 404)
-
+    
     def get(self, request, pk=None, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
-
+    
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
-
+    
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
-
+    
     # def post(self, request):
     #     serializer = StudentSerializer(data=request.data)
     #     if serializer.is_valid():

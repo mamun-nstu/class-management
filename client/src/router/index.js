@@ -54,7 +54,7 @@ export const routes = [
   },
   {
     path: '/instructors',
-    title: 'Instructor',
+    title: 'Instructors',
     name: 'Instructor',
     icon: 'card-text',
     component: () => import(/* webpackChunkName: "instructor_form" */ '../views/InstructorView.vue')
@@ -65,6 +65,13 @@ export const routes = [
     name: 'StudentDashboard',
     icon: 'view-dashboard',
     component: () => import(/* webpackChunkName: "instructor_form" */ '../views/StudentDashboardView.vue')
+  },
+  {
+    path: '/instructor-dashboard',
+    title: 'Dashboard',
+    name: 'InstructorDashboard',
+    icon: 'view-dashboard',
+    component: () => import(/* webpackChunkName: "instructor_form" */ '../views/InstructortDashboardView.vue')
   }
 ]
 
