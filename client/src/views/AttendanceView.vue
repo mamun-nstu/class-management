@@ -141,7 +141,7 @@ export default {
       });
     },
     fetch_courses() {
-      return BackendApi.course.get_all().then(res => {
+      return BackendApi.instructor.get_courses().then(res => {
         this.courses = res.data || [];
         if (this.courses.length) {
           this.selected_course = this.courses[0].id;

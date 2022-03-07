@@ -68,3 +68,19 @@ class Instructor(CustomUsers):
     class Meta:
         verbose_name = 'instructor'
         verbose_name_plural = 'instructors'
+        
+
+class Admin(CustomUsers):
+
+    def __str__(self):
+        return f'{self.username}: {self.full_name}'
+    
+    def save(self, *args, **kwargs):
+        admin_user = User.objects.filter(username=self.username)
+        if not admin_user.count():
+            User.objects.create_superuser(username=self.username)
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'admin'
+        verbose_name_plural = 'admins'

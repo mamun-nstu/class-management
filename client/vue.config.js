@@ -10,6 +10,12 @@ module.exports = {
         changeOrigin: true,
         logLevel: "debug",
       },
+      "^/media": {
+        target: "http://localhost:8000",
+        ws: true,
+        changeOrigin: true,
+        logLevel: "debug",
+      },
     }
   }
 }

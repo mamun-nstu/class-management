@@ -4,7 +4,8 @@ from django.contrib import admin
 from users.models import (
     Student,
     Instructor,
-    Batch
+    Admin,
+    Batch,
 )
 
 
@@ -16,6 +17,12 @@ class StudentAdmin(admin.ModelAdmin):
 
 @admin.register(Instructor)
 class InstructorAdmin(admin.ModelAdmin):
+    fields = ('username', 'full_name', 'date_joined',  'image_tag', 'image')
+    readonly_fields = ['image_tag']
+    
+
+@admin.register(Admin)
+class AdminAdmin(admin.ModelAdmin):
     fields = ('username', 'full_name', 'date_joined',  'image_tag', 'image')
     readonly_fields = ['image_tag']
 

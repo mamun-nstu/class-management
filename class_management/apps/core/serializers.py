@@ -6,9 +6,14 @@ from core.models import (
 )
 from users.models import (
     Student,
-    Instructor
+    Instructor, CustomUsers
 )
 
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUsers
+        fields = '__all__'
 
 class GenericStudentSerializer(serializers.ModelSerializer):
     

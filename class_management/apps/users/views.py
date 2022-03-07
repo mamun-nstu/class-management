@@ -5,10 +5,11 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from django.utils import timezone
 from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from django.db.models import Avg, Count, Min, Sum, F, IntegerField
 from core.models import Course, Attendance, CourseInstructors
-from core.serializers import AttendanceSerializer
+from core.serializers import AttendanceSerializer, CourseSearializer
+from core.utils import get_user_from_username, UserJWT
 from users.models import Student, Instructor, Batch
+from users.permission import IsStudent, IsInstructor, IsAdmin
 from users.serializers import StudentSerializer, InstructorSerializer, BatchSerializer
 from rest_framework.mixins import (
     ListModelMixin,
@@ -22,8 +23,15 @@ from rest_framework.mixins import (
 class StudentDashBoardView:
     @staticmethod
     @api_view(['GET'])
-    @permission_classes((permissions.AllowAny,))
-    def get_course_attendances(request, student_id, course_id):
+    @permission_classes([IsStudent])
+    def get_student(request):
+        return Response(StudentSerializer(instance=request.app_user.user).data, status=200)
+    
+    @staticmethod
+    @api_view(['GET'])
+    @permission_classes([IsStudent])
+    def get_course_attendances(request, course_id):
+        student_id = request.app_user.user.id
         attendances = Attendance.objects.filter(course_id=course_id, student_id=student_id)
         attendances = AttendanceSerializer(attendances, many=True)
         return Response(attendances.data, status=200)
@@ -34,8 +42,9 @@ class StudentDashBoardView:
     
     @staticmethod
     @api_view(['GET'])
-    @permission_classes((permissions.AllowAny,))
-    def get_attendance_summary(request, student_id):
+    @permission_classes([IsStudent])
+    def get_attendance_summary(request):
+        student_id = request.app_user.user.id
         attendances = Attendance.objects.filter(student_id=student_id).prefetch_related('course')
         total_classes = {}
         total_attendances = {}
@@ -57,7 +66,7 @@ class StudentDashBoardView:
         return Response(res, status=200)
 
 
-@permission_classes((permissions.AllowAny,))
+@permission_classes([IsAdmin])
 class StudentList(ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
@@ -94,7 +103,7 @@ class StudentList(ListCreateAPIView):
         return Response(serializer.errors, status=400)
 
 
-@permission_classes((permissions.AllowAny,))
+@permission_classes([IsAdmin])
 class StudentDetail(RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
@@ -123,11 +132,11 @@ class StudentDetail(RetrieveUpdateDestroyAPIView):
         return Response(serializer.errors, status=400)
 
 
-@permission_classes((permissions.AllowAny,))
+@permission_classes([IsAdmin])
 class InstructorList(ListCreateAPIView):
     queryset = Instructor.objects.all()
     serializer_class = InstructorSerializer
-
+    
     def post(self, request, *args, **kwargs):
         instructor_data = request.data
         # nested data problem in serializer
@@ -148,12 +157,12 @@ class InstructorList(ListCreateAPIView):
                     start=timezone.now()
                 )
                 ci.save()
-        
+            
             return Response(self.serializer_class(instructor).data, status=200)
         return Response(serializer.errors, status=400)
 
 
-@permission_classes((permissions.AllowAny,))
+@permission_classes([IsAdmin])
 class InstructorDetail(RetrieveUpdateDestroyAPIView):
     queryset = Instructor.objects.all()
     serializer_class = InstructorSerializer
@@ -193,10 +202,31 @@ class InstructorDetail(RetrieveUpdateDestroyAPIView):
 class InstructorDashboardView:
     @staticmethod
     @api_view(['GET'])
-    @permission_classes((permissions.AllowAny,))
-    def get_attendances(request, instructor_id, course_id):
-        total_classes = Attendance.objects.filter(course_id=course_id).values('date').distinct().count()
-        attendances = Attendance.objects.filter(course_id=course_id).prefetch_related('student')
+    @permission_classes([IsInstructor])
+    def get_instructor(request):
+        return Response(InstructorSerializer(instance=request.app_user.user).data, status=200)
+    
+    @staticmethod
+    @api_view(['GET'])
+    @permission_classes([IsInstructor])
+    def get_courses(request):
+        instructor_id = request.app_user.user.id
+        courses = Course.objects.filter(courseinstructors__instructor__id=instructor_id).all()
+        return Response(CourseSearializer(instance=courses, many=True).data, status=200)
+    
+    @staticmethod
+    @api_view(['GET'])
+    @permission_classes([IsInstructor])
+    def get_attendances(request, course_id):
+        instructor_id = request.app_user.user.id
+        total_classes = Attendance.objects \
+            .filter(course_id=course_id, instructor_id=instructor_id) \
+            .values('date') \
+            .distinct() \
+            .count()
+        attendances = Attendance.objects \
+            .filter(course_id=course_id, instructor_id=instructor_id) \
+            .prefetch_related('student')
         student_info = {}
         total_present = {}
         for attendance in attendances:
@@ -216,19 +246,21 @@ class InstructorDashboardView:
             })
         return Response(res, status=200)
     
-
     @staticmethod
     @api_view(['GET'])
-    @permission_classes((permissions.AllowAny,))
-    def get_course_students(request, instructor_id, course_id):
-        students = Student.objects.filter(courses__id=course_id)
+    @permission_classes([IsInstructor])
+    def get_course_students(request, course_id):
+        instructor = request.app_user.user
+        course = Course.objects.get(id=course_id, instructors__in=[instructor])
+        students = Student.objects.filter(courses__in=[course])
         return Response(StudentSerializer(instance=students, many=True).data, status=200)
     
     @staticmethod
     @api_view(['GET'])
-    @permission_classes((permissions.AllowAny,))
-    def get_course_student_summary(request, instructor_id, course_id, student_id):
-        attendances = Attendance.objects.filter(student_id=student_id, course_id=course_id)
+    @permission_classes([IsInstructor])
+    def get_course_student_summary(request, course_id, student_id):
+        instructor_id = request.app_user.user.id
+        attendances = Attendance.objects.filter(student_id=student_id, instructor_id=instructor_id, course_id=course_id)
         total_classes = attendances.count()
         res = []
         present = 0
@@ -238,7 +270,7 @@ class InstructorDashboardView:
                 'present': attendance.present
             })
             present += 1 if attendance.present else 0
-            
+        
         percentage = 0
         if total_classes:
             percentage = round(present / total_classes * 100, 2)
@@ -264,6 +296,27 @@ class BatchDetail(RetrieveUpdateDestroyAPIView):
 
 
 @permission_classes((permissions.AllowAny,))
+class UserView(APIView):
+    queryset = Batch.objects.all()
+    
+    def get(self, request):
+        return Response(request.app_user.dict(), status=200)
+
+
+@permission_classes((permissions.AllowAny,))
+class GetToken(APIView):
+    def get(self, request):
+        username = request.query_params.get('username', '')
+        user = get_user_from_username(username=username)
+        if not user:
+            return Response({'error': 'user not found'}, status=404)
+        token = UserJWT.generate_jwt(user)
+        response = Response({'token': token}, status=200)
+        response.set_cookie('auth_token', token, path='/')
+        return response
+
+
+@permission_classes([IsAdmin])
 class StudentAPI(
     GenericAPIView,
     ListModelMixin,

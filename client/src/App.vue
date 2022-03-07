@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Header />
+    <Header/>
     <v-main>
       <v-card>
         <v-navigation-drawer class="blue darken-3 white--text"
@@ -9,25 +9,25 @@
           :app="true"
           :bottom="true"
         >
-          <v-list >
+          <v-list>
             <v-list-item class="px-2">
-              <v-list-item-avatar >
-                <v-img src="@/assets/proloy1.jpg"></v-img>
+              <v-list-item-avatar>
+                <img v-if="user.image" :src="user.image"/>
               </v-list-item-avatar>
             </v-list-item>
-
+            
             <v-list-item link>
               <v-list-item-content>
                 <v-list-item-title class="text-h6 white--text">
-                  Sandra Adams
+                  {{ user.full_name }}
                 </v-list-item-title>
-                <v-list-item-subtitle class="white--text">sandra_a88@gmail.com</v-list-item-subtitle>
+                <v-list-item-subtitle class="white--text">{{ user.username }}</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </v-list>
-
+          
           <v-divider></v-divider>
-
+          
           <v-list
             nav
             dense
@@ -49,16 +49,20 @@
 </template>
 
 <script>
-import { INCREMENT } from "./store/mutation_types";
+import { INCREMENT, UPDATE_USER } from "./store/mutation_types";
 import Footer from "./components/Footer";
 import BackendApi from "./js/backend";
-import { routes } from "./router";
+import { ADMIN_ROUTES, COMMON_ROUTES, INSTRUCTOR_ROUTES, STUDENT_ROUTES } from "./router";
 import Header from "./components/Header";
+import user_mixin from "./mixins/User";
 
 export default {
   name: "App",
-  components: {Header, Footer },
-  beforeMount() {
+  components: { Header, Footer },
+  mixins: [user_mixin],
+  async beforeMount() {
+    await this.fetch_user();
+    await this.update_routes();
     window.onSignIn = function (googleUser) {
       var profile = googleUser.getBasicProfile();
       console.log('ID: ' + profile.getId());
@@ -79,17 +83,31 @@ export default {
   computed: {
     cur_route() {
       return routes.filter((route) => route.name === this.$route.name)[0];
-    }
+    },
   },
   methods: {
     goto_route(route) {
       this.$router.push({ name: route.name });
+    },
+    async fetch_user() {
+      await this.$store.dispatch(UPDATE_USER);
+    },
+    update_routes() {
+      let routes_to_add = [];
+      if (this.user.type === 'student') {
+        routes_to_add = STUDENT_ROUTES;
+      } else if (this.user.type === 'instructor') {
+        routes_to_add = INSTRUCTOR_ROUTES;
+      } else if (this.user.type === 'admin') {
+        routes_to_add = ADMIN_ROUTES;
+      }
+      this.routes = [...this.routes, ...routes_to_add];
     }
   },
   data() {
     return {
       INCREMENT,
-      routes,
+      routes: COMMON_ROUTES,
     };
   },
 };

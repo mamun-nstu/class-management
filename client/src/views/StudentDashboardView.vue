@@ -134,12 +134,12 @@ export default {
     }
   },
   beforeMount() {
-    return BackendApi.student.get(1)
+    return BackendApi.student.me()
       .then(res => {
         console.log(res);
         this.success = true;
         this.student = res.data;
-        this.get_attendance_summary(this.student.id);
+        this.get_attendance_summary();
         this.courses = this.student.courses;
         this.courses = this.courses.map((course) => {
           return {
@@ -161,7 +161,7 @@ export default {
       el.href = img;
     },
     get_attendances() {
-      return BackendApi.student.get_attendances(this.student.id, this.selected_course.id)
+      return BackendApi.student.get_attendances(this.selected_course.id)
         .then(res => {
           this.attendances = res.data;
         }).catch((err) => {
@@ -169,7 +169,7 @@ export default {
         })
     },
     get_attendance_summary() {
-      return BackendApi.student.get_attendance_summary(this.student.id)
+      return BackendApi.student.get_attendance_summary()
         .then(res => {
           console.log(res);
           this.attendance_summary = res.data;

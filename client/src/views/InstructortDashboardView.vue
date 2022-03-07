@@ -223,7 +223,8 @@ export default {
   watch: {
     selected_course(new_val) {
       if (new_val && new_val.id) {
-        BackendApi.instructor.get_courses_student(this.instructor.id, new_val.id)
+        console.log('NEW VAL', new_val);
+        BackendApi.instructor.get_courses_student(new_val.id)
           .then(res => {
             this.students = res.data;
             this.students = this.students.map((student) => {
@@ -237,7 +238,7 @@ export default {
     }
   },
   beforeMount() {
-    return BackendApi.instructor.get(3)
+    return BackendApi.instructor.me()
       .then(res => {
         console.log(res);
         this.success = true;
@@ -256,7 +257,7 @@ export default {
   },
   methods: {
     get_attendances() {
-      return BackendApi.instructor.get_attendances(this.instructor.id, this.selected_course.id)
+      return BackendApi.instructor.get_attendances(this.selected_course.id)
         .then(res => {
           this.attendances = res.data;
         }).catch((err) => {
@@ -265,7 +266,6 @@ export default {
     },
     get_course_student_summary() {
       return BackendApi.instructor.get_course_student_view(
-        this.instructor.id,
         this.selected_course.id,
         this.selected_student.id
       )
