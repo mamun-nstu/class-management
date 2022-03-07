@@ -41,7 +41,7 @@
 
           </v-flex>
 
-          <v-devider></v-devider>
+          <v-divider></v-divider>
 
 
 
