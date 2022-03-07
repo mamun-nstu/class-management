@@ -80,7 +80,7 @@ class UserJWT:
     def get_user(token):
         decoded_val = UserJWT.decode_jwt(token)
         if not decoded_val:
-            return UserJWT.UserInfo(None, None)
+            return UserJWT.UserInfo(None, None, None)
         username = decoded_val.get('username')
         student = Student.objects.filter(username=username)
         instructor = Instructor.objects.filter(username=username)
