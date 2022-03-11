@@ -4,11 +4,11 @@
       <v-row>
         <v-col class="col-md-4 full-height">
           <v-card class="full-height">
-            <v-card-title class="card-heading">Instructor Details</v-card-title>
+            <v-card-title class="card-heading" style="background-color: #202C46">Instructor Details</v-card-title>
             <v-card-text>
               <div class="instructor-detail">
                 <img height="100%" width="100%" v-if="instructor.image" :src="instructor.image" :alt="instructor.full_name" />
-                <p class="name">{{ instructor.full_name }}</p>
+                <p class="name mt-6">{{ instructor.full_name }}</p>
                 <p>Email: {{ instructor.username }}</p>
               </div>
             </v-card-text>
@@ -17,21 +17,25 @@
               <v-btn
                 width="100%"
                 :style="{borderRadius: '0!important'}"
-                :class="cur_tab === 'running_courses'? 'primary' : '' "
+                :color="cur_tab === 'running_courses'? '#202C46' : '' "
+                :class="cur_tab === 'running_courses'? 'white--text' : '' "
                 @click="cur_tab='running_courses'"
               >Running Courses
               </v-btn>
               <v-btn
                 width="100%"
                 :style="{borderRadius: '0!important'}"
-                :class="cur_tab === 'student_attendance_detail'? 'primary' : ''"
+                :color="cur_tab === 'student_attendance_detail'? '#202C46' : '' "
+                :class="cur_tab === 'student_attendance_detail'? 'white--text' : '' "
+
                 @click="cur_tab='student_attendance_detail'"
               >Student Attendance Detail
               </v-btn>
               <v-btn
                 width="100%"
                 :style="{borderRadius: '0!important'}"
-                :class="cur_tab === 'attendance_summary'? 'primary' : ''"
+                :color="cur_tab === 'attendance_summary'? '#202C46' : '' "
+                :class="cur_tab === 'attendance_summary'? 'white--text' : '' "
                 @click="cur_tab='attendance_summary'"
               >Attendance Summary
               </v-btn>
@@ -41,7 +45,7 @@
         <v-col class="col-md-8 full-height">
           <v-card class="pb-3">
             <div v-show="cur_tab === 'running_courses'">
-              <v-card-title class="card-heading">My Running Courses</v-card-title>
+              <v-card-title class="card-heading" style="background-color: #202C46">My Running Courses</v-card-title>
               <v-card-text class="m-0 p-0">
                 <v-simple-table>
                   <template v-slot:default>
@@ -58,9 +62,9 @@
               </v-card-text>
             </div>
             <div v-show="cur_tab === 'student_attendance_detail'">
-              <v-card-title class="card-heading">Student Attendance for each Course</v-card-title>
+              <v-card-title class="card-heading" style="background-color: #202C46">Student Attendance details for each Course</v-card-title>
               <v-card-text>
-                <div class="d-flex">
+                <div class="d-flex mt-4">
                   <span class="label pr-5">Select Course</span>
                   <v-select
                     outlined
@@ -89,7 +93,7 @@
                   />
                 </div>
                 <div class="d-flex justify-start p-4">
-                  <v-btn class="primary" @click.prevent="get_course_student_summary">Show Attendance</v-btn>
+                  <v-btn class=" white--text" @click.prevent="get_course_student_summary"  style="background-color: #202C46">Show Attendance</v-btn>
                 </div>
                 <v-divider></v-divider>
                 <div v-if="attendance_summary && attendance_summary.classes && attendance_summary.classes.length">
@@ -127,9 +131,9 @@
               </v-card-text>
             </div>
             <div v-show="cur_tab === 'attendance_summary'">
-              <v-card-title class="card-heading">Attendance Details</v-card-title>
+              <v-card-title class="card-heading white--text" style="background-color: #202C46">Attendance Summary</v-card-title>
               <v-card-text class="pb-3">
-                <div class="d-flex">
+                <div class="d-flex mt-4">
                   <span class="label pr-5">Select Course</span>
                   <v-select
                     outlined
@@ -144,7 +148,7 @@
                   />
                 </div>
                 <div class="d-flex justify-start p-4">
-                  <v-btn class="primary" @click.prevent="get_attendances">View Summary</v-btn>
+                  <v-btn color="#202C46" class="white--text" @click.prevent="get_attendances"  >View Summary</v-btn>
                 </div>
                 <div v-if="attendances.length">
                   <v-simple-table>

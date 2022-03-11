@@ -23,6 +23,7 @@
         />
         <v-select
           multiple
+          dark
           v-model="instructor.courses"
           no-data-text="No course found"
           placeholder="Select courses"
@@ -34,6 +35,7 @@
         />
         <v-file-input
           v-model="instructor.image"
+          dark
           accept="image/png, image/jpeg, image/bmp"
           label="Upload image"
           show-size
@@ -101,4 +103,6 @@ export default {
   }
 };
 </script>
+<style lang="scss">
 
+</style>

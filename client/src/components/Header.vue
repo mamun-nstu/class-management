@@ -17,10 +17,10 @@
 
 <!--          style="height: 100px; width: 80px;">-->
 <!--        <v-icon size="50" class=" pt-11 white&#45;&#45;text" >mdi-book-open-variant</v-icon>-->
-        <v-img src="@/assets/ams-icon.png" max-height="60" max-width="60" class="mt-12"></v-img>
+        <v-img src="@/assets/ams-icon.png" max-height="60" max-width="60" class="mt-12 ml-16"></v-img>
         <v-toolbar-title class="pt-14 font-weight-bold text-uppercase pl-1" >
           <span class="white--text text-h5">ICE-AMS<br> </span>
-          <span class="caption white--text text-capitalize">Smart Attendance Solution for ICE dept</span>
+          <span class="caption white--text text-capitalize">Smart Attendance Solution for ICE Department</span>
 
 <!--          <span>Noakhali Science &</span> <br> <span>Technology University</span>-->
         </v-toolbar-title>

@@ -32,9 +32,11 @@
           show-size
           outlined
           dense
+          dark
           prepend-icon=""
       ></v-file-input>
         <v-select
+            dark
             multiple
             v-model="student.courses"
             no-data-text="No course found"

@@ -1,14 +1,14 @@
 <template>
   <div class="attendances">
     <v-container fluid>
-      <v-row>
+      <v-row class="">
         <v-col class="col-lg-3 col-md-6 d-flex">
-          <span class="heading">Select Batch</span>
-          <v-select :items="batches" v-model="selected_batch" item-text="name" item-value="id"></v-select>
+          <span class="heading white--text rounded-r-circle text-center pt-3" style="background-color: #202C46 ; ">Select Batch</span>
+          <v-select class="pl-4" :items="batches" v-model="selected_batch" item-text="name" item-value="id"></v-select>
         </v-col>
         <v-col class="col-lg-3 col-md-6 d-flex">
-          <span class="heading">Select Course</span>
-          <v-select :items="courses" v-model="selected_course" item-text="code" item-value="id"></v-select>
+          <span class="heading white--text rounded-r-circle text-center pt-3" style="background-color: #202C46 ; ">Select Course</span>
+          <v-select class="pl-4" :items="courses" v-model="selected_course" item-text="code" item-value="id"></v-select>
         </v-col>
         <v-col class="col-lg-4 col-md-6">
           <v-dialog
@@ -18,12 +18,14 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                color="primary"
+                color="#202C46"
+                class="mt-3"
+
                 dark
                 v-bind="attrs"
                 v-on="on"
               >
-                <span class="heading">Choose Date</span>
+                <span class="heading white--text " >Choose Date</span>
               </v-btn>
             </template>
             <v-card>
@@ -33,45 +35,45 @@
         </v-col>
       </v-row>
       <!--      <v-btn @click="fetch_attendances" class="mb-8">Fetch</v-btn>-->
-      <v-divider></v-divider>
+      <v-divider class="mt-16 mb-10"></v-divider>
       <v-row>
         <v-col class="col-md-6">
-          <v-card>
-            <v-card-title class="card-title">Scan your QR code</v-card-title>
+          <v-card width="600">
+            <v-card-title class="card-title white--text" style="background-color: #202C46; text-align: center;">Scan your QR code</v-card-title>
             <v-card-text>
               <QRCodeReader @success="update_attendance" />
             </v-card-text>
           </v-card>
         </v-col>
         <v-col class="col-md-6">
-          <v-card :style="{height: '100%'}">
-            <v-card-title class="card-title" >Scanned Information</v-card-title>
-            <v-card-text>
+          <v-card width="600" :style="{height: '100%'}">
+            <v-card-title class="card-title white--text" style="background-color: #202C46; text-align: center;">Scanned Information</v-card-title>
+            <v-card-text class="mt-10">
               <v-row class="student-info">
-                <v-col class="col-5">Course Title</v-col>
+                <v-col class="col-5">Course Title : </v-col>
                 <v-col class="col-7">{{selected_course}}</v-col>
                 <v-divider></v-divider>
-                <v-col class="col-5">Student ID</v-col>
+                <v-col class="col-5">Student ID : </v-col>
                 <v-col class="col-7">{{qr_result.student_id}}</v-col>
-                <v-col class="col-5">Student Name</v-col>
+                <v-col class="col-5">Student Name : </v-col>
                 <v-col class="col-7">{{qr_result.full_name}}</v-col>
-                <v-col class="col-5">Email</v-col>
+                <v-col class="col-5">Email : </v-col>
                 <v-col class="col-7">{{qr_result.username}}</v-col>
               </v-row>
             </v-card-text>
           </v-card>
         </v-col>
       </v-row>
-      <v-divider></v-divider>
+      <v-divider class="mt-10 mb-10"></v-divider>
       <div class="student-attendances">
-        <div class="heading mb-5 mt-5">Showing attendance of {{date}}</div>
-        <StudentAttendance
+        <div class="heading mb-5 mt-5 white--text text-h6 pt-2 pl-4"  style="background-color: #202C46; height: 50px;">Showing attendance of :  {{date}}</div>
+        <StudentAttendance class="pl-4"
             v-for="attendance in attendances"
             :key="`${attendance.student.id}|${attendance.present}`"
             :attendance_data="attendance"
             @change="update_present"
         />
-        <v-btn v-if="attendances.length > 0" @click="update_attendances" class="mb-8">Update</v-btn>
+        <v-btn v-if="attendances.length > 0" @click="update_attendances" color="#202C46" class="mb-8 white--text">Update</v-btn>
       </div>
     </v-container>
   </div>

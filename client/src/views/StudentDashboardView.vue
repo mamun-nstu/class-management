@@ -4,10 +4,10 @@
       <v-row>
         <v-col class="col-md-4 full-height">
           <v-card class="full-height">
-            <v-card-title class="card-heading">Student Details</v-card-title>
+            <v-card-title class="card-heading" style="background-color: #202C46">Student Details</v-card-title>
             <v-card-text>
               <div class="student-detail">
-                <img height="100%" width="100%" v-if="student.image" :src="student.image" :alt="student.full_name" />
+                <img class="mb-8" height="100%" width="100%" v-if="student.image" :src="student.image" :alt="student.full_name" />
                 <p class="name">{{ student.full_name }}</p>
                 <p>Student ID: {{ student.student_id }}</p>
                 <p>Email: {{ student.username }}</p>
@@ -16,30 +16,33 @@
           </v-card>
         </v-col>
         <v-col class="col-md-8 full-height">
-          <v-card>
-            <v-card-title class="card-heading">Attendance Summary</v-card-title>
+          <v-card class="ml-5">
+            <v-card-title class="card-heading" style="background-color: #202C46">Attendance Summary</v-card-title>
             <v-card-text class="m-0 p-0">
               <StudentAttendanceSummary :attendances="attendance_summary"/>
             </v-card-text>
           </v-card>
         </v-col>
       </v-row>
-      <v-divider></v-divider>
+      <v-divider class="mt-6 mb-6"></v-divider>
       <v-row class="full-height">
         <v-col class="col-md-4">
-          <v-card-title class="card-heading">Secret QR Code</v-card-title>
-          <v-card-text>
-            <QRCodeGenerator id="qrcode" :size="250" class="pt-5" :value="JSON.stringify(generalized_student)"/>
-            <div class="d-flex justify-center">
-              <a download="qrcode.png" href="" @click="download_image" class="text-button">Download</a>
-            </div>
-          </v-card-text>
+          <v-card>
+            <v-card-title class="card-heading rounded" style="background-color: #202C46">Secret QR Code</v-card-title>
+            <v-card-text>
+              <QRCodeGenerator id="qrcode" :size="250" class="pt-5" :value="JSON.stringify(generalized_student)"/>
+              <div class="d-flex justify-center" >
+                <a download="qrcode.png" href="" @click="download_image" class="text-button white--text ma-4 rounded text-decoration-none" style="background-color: #202C46; text-align: center; padding-top: 3px; width: 160px; height: 40px;">Download</a>
+              </div>
+            </v-card-text>
+          </v-card>
+
         </v-col>
         <v-col class="col-md-8">
-          <v-card>
-            <v-card-title class="card-heading">Attendance Details</v-card-title>
+          <v-card class="ml-5">
+            <v-card-title class="card-heading" style="background-color: #202C46">Attendance Details</v-card-title>
             <v-card-text class="pb-3">
-              <div class="d-flex">
+              <div class="d-flex mt-4">
                 <span class="label pr-5">Select Course</span>
                 <v-select
                   outlined
@@ -52,8 +55,8 @@
                   :items="courses"
                 />
               </div>
-              <div class="d-flex justify-center p-4">
-                <v-btn class="primary" @click.prevent="get_attendances">Get Attendances</v-btn>
+              <div class="d-flex justify-center p-4" >
+                <v-btn class="white--text" @click.prevent="get_attendances"  style="background-color: #202C46">Get Attendances</v-btn>
               </div>
               <div v-if="attendances.length">
                 <v-simple-table>
@@ -79,10 +82,10 @@
                     </tbody>
                   </template>
                 </v-simple-table>
-                <v-card class="pt-3 pb-3 m-2">
-                  <v-card-text><b>Total Classes:</b> {{ attendances.length }}</v-card-text>
-                  <v-card-text><b>Present counts:</b> {{ presents }}</v-card-text>
-                  <v-card-text><b>Present Percentage:</b> {{ attendance_percentange }}%</v-card-text>
+                <v-card class="pt-3 pb-3 m-2 " style="background-color: #202C46; opacity: .8">
+                  <v-card-text class="white--text"><b>Total Classes:</b> {{ attendances.length }}</v-card-text>
+                  <v-card-text class="white--text"><b>Present counts:</b> {{ presents }}</v-card-text>
+                  <v-card-text class="white--text"><b>Present Percentage:</b> {{ attendance_percentange }}%</v-card-text>
                 </v-card>
               
               </div>
@@ -121,12 +124,14 @@ export default {
       }, 0);
     },
     generalized_student() {
-      return {
+      const val =  {
         id: this.student.id,
         student_id: this.student.student_id,
         username: this.student.username,
         full_name: this.student.full_name
-      }
+      };
+      console.log(JSON.stringify(val));
+      return val;
     },
     attendance_percentange() {
       if (this.attendances.length === 0) return 0;

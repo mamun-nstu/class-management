@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-        <div class="about blue darken-3 white--text text-center" style="height: 75px">
+        <div class="about white--text text-center" style="height: 75px; background-color: #202C46; opacity: .9">
           <h4 class="pt-6">Department of Information and Communication Engineering </h4>
         </div>
     </v-container>
@@ -9,7 +9,7 @@
     <v-container>
       <v-layout row wrap class=" grey lighten-3">
 
-        <v-flex xs12 md4 class="">
+        <v-flex xs12 md4 class="mt-5 ml-4">
           <v-img src="@/assets/chairman.jpg" max-height="360" max-width="240" class="ma-6"></v-img>
         </v-flex>
 

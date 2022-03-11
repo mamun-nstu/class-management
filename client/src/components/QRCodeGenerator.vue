@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="text-center rounded">
     <qrcode-vue :id="id" :value="value" :size="size" :level="level" render-as="canvas" />
   </div>
 </template>

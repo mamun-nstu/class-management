@@ -3,7 +3,7 @@
     <Header/>
     <v-main>
       <v-card>
-        <v-navigation-drawer class="blue darken-3 white--text"
+        <v-navigation-drawer class="white--text" color="#202C46"
           permanent
           expand-on-hover
           :app="true"
@@ -15,7 +15,7 @@
                 <img v-if="user.image" :src="user.image"/>
               </v-list-item-avatar>
             </v-list-item>
-            
+
             <v-list-item link>
               <v-list-item-content>
                 <v-list-item-title class="text-h6 white--text">
@@ -25,9 +25,9 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-          
+
           <v-divider></v-divider>
-          
+
           <v-list
             nav
             dense
@@ -35,9 +35,9 @@
           >
             <v-list-item @click.prevent="goto_route(route)" :key="route.name" v-for="route in routes" link>
               <v-list-item-icon>
-                <v-icon>mdi-{{ route.icon }}</v-icon>
+                <v-icon class="white--text">mdi-{{ route.icon }}</v-icon>
               </v-list-item-icon>
-              <v-list-item-title> {{ route.title }}</v-list-item-title>
+              <v-list-item-title class="white--text"> {{ route.title }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-navigation-drawer>
@@ -118,7 +118,7 @@ body {
 }
 
 #app {
-  max-width: 1000px;
+  //max-width: 1410px;
   margin: auto;
   align-content: center;
 }

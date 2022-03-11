@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <p class="error">{{ error }}</p>
+  <div >
+    <p class="error" >{{ error }}</p>
 
 <!--    <p class="decode-result">Last result: <b>{{ result }}</b></p>-->
     <qrcode-stream :camera="camera" @decode="onDecode" :track="decorate" @init="onInit"/>

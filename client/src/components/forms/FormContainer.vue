@@ -15,7 +15,6 @@
         <v-btn class="btn-primary" :disabled="invalid" @click="submit"> Submit</v-btn>
       </ValidationObserver>
     </div>
-
   </div>
 </template>
 

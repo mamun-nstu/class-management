@@ -1,6 +1,6 @@
 <template>
 
-  <div class="indigo darken-4 white--text mt-16">
+  <div class=" white--text mt-16" style="background-color: #202C46;">
         <v-layout row wrap class="ma-5">
           <v-flex xs12 md2 class=" mt-10 mb-10">
 
@@ -41,12 +41,15 @@
 
           </v-flex>
 
-          <v-divider></v-divider>
-
-
-
         </v-layout>
 
+    <v-divider class="white lighten-5"></v-divider>
+
+        <div  style="height: 55px">
+          <p class="caption text-center">
+             Copyright &copy; 2022 | Information & Communication Engineering Department | <br>Noakhali Science and Technology University | All Rights Reserved
+          </p>
+        </div>
 
   </div>
 

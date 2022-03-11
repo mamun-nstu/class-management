@@ -1,6 +1,9 @@
 <template>
   <ValidationProvider :name="label" :rules="rules" v-slot="{errors}">
     <v-text-field
+        color="#FFFFFF"
+        class="white--text"
+        dark
         :value="value"
         @input="update"
         @blur="do_nothing"

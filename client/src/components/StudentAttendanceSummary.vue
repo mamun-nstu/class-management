@@ -1,5 +1,5 @@
 <template>
-<div>
+<div style="background-color: #202C46">
     <v-data-table
       :headers="headers"
       :items="attendances"
