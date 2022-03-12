@@ -19,6 +19,12 @@ class StudentSerializer(GenericStudentSerializer):
     batch = BatchSerializer(required=False)
 
 
+class InstructorNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Instructor
+        fields = ['full_name', 'username']
+
+
 class CourseDetailSerializer(serializers.ModelSerializer):
     course = CourseSearializer()
     batch = BatchSerializer()

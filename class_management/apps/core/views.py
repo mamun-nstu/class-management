@@ -16,11 +16,11 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 
 from core.models import Course, Attendance
-from core.serializers import CourseSearializer, AttendanceSerializer, GenericStudentSerializer
+from core.serializers import CourseSearializer, AttendanceSerializer, GenericStudentSerializer, CourseNameSerializer
 from core.utils import get_user_from_username, UserJWT
 from users.models import Batch, Student, Instructor
 from users.permission import IsInstructor, IsAdmin
-
+from users.serializers import InstructorNameSerializer
 
 
 @permission_classes([permissions.IsAdminUser,])
@@ -142,11 +142,14 @@ class UploadUserImage(APIView):
 @permission_classes([])
 class AppInfo(APIView):
     def get(self, request):
+        x = 1
         data = {
             'total_students': Student.objects.count(),
             'total_instructors': Instructor.objects.count(),
             'total_courses': Course.objects.count(),
-            'total_batches': Batch.objects.count()
+            'total_batches': Batch.objects.count(),
+            'instructors': InstructorNameSerializer(instance=Instructor.objects.all(), many=True).data,
+            'courses': CourseNameSerializer(instance=Course.objects.all(), many=True).data
         }
         return Response(data, status=200)
 

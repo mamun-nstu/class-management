@@ -12,14 +12,14 @@
         >
           <v-list>
             <v-list-item class="px-2">
-              <v-list-item-avatar>
-                <img v-if="user.image" :src="user.image"/>
+              <v-list-item-avatar class="mt-6">
+                <img class="text-center" v-if="user.image" :src="user.image"/>
               </v-list-item-avatar>
             </v-list-item>
             
             <v-list-item link>
               <v-list-item-content>
-                <v-list-item-title class="text-h6 white--text">
+                <v-list-item-title class="text-h6 white--text mt-2">
                   {{ user.full_name }}
                 </v-list-item-title>
                 <v-list-item-subtitle class="white--text">{{ user.username }}</v-list-item-subtitle>
@@ -27,7 +27,7 @@
             </v-list-item>
           </v-list>
           
-          <v-divider></v-divider>
+          <v-divider class="red"></v-divider>
           
           <v-list
             nav
@@ -98,12 +98,16 @@ body {
   align-content: center;
 }
 .main-app {
-  max-width: 1200px;
+
   width: 100%;
   margin: auto;
   min-height: 400px;
 }
 .active-route {
   background-color: darkred;
+}
+.about, .student{
+  max-width: 1200px;
+  margin: auto;
 }
 </style>

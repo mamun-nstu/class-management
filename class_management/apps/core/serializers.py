@@ -40,3 +40,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
         model = Attendance
         fields = '__all__'
         
+class CourseNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ['name', 'code']
