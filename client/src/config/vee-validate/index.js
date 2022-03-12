@@ -3,7 +3,7 @@ import { required, email, min, max } from 'vee-validate/dist/rules';
 
 extend('required', {
   ...required,
-  message: '{_field_} is required'
+  message: 'This field is required'
 });
 
 extend('max', {

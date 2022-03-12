@@ -20,11 +20,12 @@ import StudentForm from "../components/forms/StudentForm";
 import BackendApi from "../js/backend";
 import student_mixin from "../mixins/Student";
 import course_mixin from "../mixins/Course";
+import batch_mixin from "../mixins/Batch";
 
 export default {
   name: "StudentView",
   components: {StudentForm, GenericView},
-  mixins: [student_mixin, course_mixin],
+  mixins: [student_mixin, course_mixin, batch_mixin],
   methods: {
     delete_student(item) {
       return BackendApi.student.delete(item.id)

@@ -4,9 +4,15 @@ export class InstructorApi extends GenericApi {
   constructor(base_url) {
     super(base_url);
   }
-  get_attendances(course_id) {
+  get_attendances(course_id, batch_id) {
     return super.send({
-      url: `${this.base_url}/summary/courses/${course_id}/`,
+      url: `${this.base_url}/summary/courses/${course_id}/batches/${batch_id}`,
+      method: 'GET',
+    });
+  }
+  get_students(course_id, batch_id){
+    return super.send({
+      url: `${this.base_url}/courses/${course_id}/batches/${batch_id}/students/`,
       method: 'GET',
     });
   }

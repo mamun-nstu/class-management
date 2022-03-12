@@ -88,11 +88,12 @@ class StudentList(ListCreateAPIView):
         # nested data problem in serializer
         courses = student_data.pop('courses', [])
         image = student_data.pop('image', None)
+        batch = student_data.pop('batch', None)
         serializer = self.serializer_class(data=student_data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
             validated_data.pop('courses', [])
-            student = Student.objects.create(**validated_data)
+            student = Student.objects.create(**validated_data, batch=Batch.objects.get(id=batch.get('id')))
             if image:
                 student.image = image
                 student.save()
@@ -113,6 +114,7 @@ class StudentDetail(RetrieveUpdateDestroyAPIView):
         student_data = request.data
         # nested data problem in serializer
         courses = student_data.pop('courses', [])
+        batch = student_data.pop('batch', None)
         image = student_data.pop('image', None)
         student = Student.objects.get(id=id)
         serializer = self.serializer_class(data=student_data, instance=student)
@@ -123,6 +125,7 @@ class StudentDetail(RetrieveUpdateDestroyAPIView):
                 setattr(student, key, value)
             if image:
                 student.image = image
+            student.batch = Batch.objects.get(id=batch.get('id'))
             student.save()
             student.courses.clear()
             for course in courses:
@@ -140,20 +143,20 @@ class InstructorList(ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         instructor_data = request.data
         # nested data problem in serializer
-        courses = instructor_data.pop('courses', [])
+        course_details = instructor_data.pop('course_details', [])
         image = instructor_data.pop('image', None)
         serializer = self.serializer_class(data=instructor_data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
-            validated_data.pop('courses', [])
+            validated_data.pop('course_details', [])
             instructor = Instructor.objects.create(**validated_data, image=image)
-            batch = Batch.objects.all()
-            batch = batch[0]
-            for course in courses:
+            for course_detail in course_details:
+                course = course_detail.get('course')
+                batch = course_detail.get('batch')
                 ci = CourseInstructors(
                     course=Course.objects.get(id=course.get('id')),
                     instructor=instructor,
-                    batch=batch,
+                    batch=Batch.objects.get(id=batch.get('id')),
                     start=timezone.now()
                 )
                 ci.save()
@@ -172,25 +175,25 @@ class InstructorDetail(RetrieveUpdateDestroyAPIView):
         instructor_data = request.data
         image = instructor_data.pop('image', None)
         # nested data problem in serializer
-        courses = instructor_data.pop('courses', [])
+        course_details = instructor_data.pop('course_details', [])
         instructor = Instructor.objects.get(id=id)
         serializer = self.serializer_class(data=instructor_data, instance=instructor)
         if serializer.is_valid():
             validated_data = serializer.validated_data
-            validated_data.pop('courses', [])
+            validated_data.pop('course_details', [])
             for (key, value) in validated_data.items():
                 setattr(instructor, key, value)
             if image:
                 instructor.image = image
             instructor.save()
             instructor.courses.clear()
-            batch = Batch.objects.all()
-            batch = batch[0]
-            for course in courses:
+            for course_detail in course_details:
+                course=course_detail.get('course')
+                batch = course_detail.get('batch')
                 ci = CourseInstructors(
                     course=Course.objects.get(id=course.get('id')),
                     instructor=instructor,
-                    batch=batch,
+                    batch=Batch.objects.get(id=batch.get('id')),
                     start=timezone.now()
                 )
                 ci.save()
@@ -217,15 +220,15 @@ class InstructorDashboardView:
     @staticmethod
     @api_view(['GET'])
     @permission_classes([IsInstructor])
-    def get_attendances(request, course_id):
+    def get_attendances(request, course_id, batch_id):
         instructor_id = request.app_user.user.id
         total_classes = Attendance.objects \
-            .filter(course_id=course_id, instructor_id=instructor_id) \
+            .filter(course_id=course_id, instructor_id=instructor_id, student__batch_id=batch_id) \
             .values('date') \
             .distinct() \
             .count()
         attendances = Attendance.objects \
-            .filter(course_id=course_id, instructor_id=instructor_id) \
+            .filter(course_id=course_id, instructor_id=instructor_id, student__batch_id=batch_id) \
             .prefetch_related('student')
         student_info = {}
         total_present = {}
@@ -253,6 +256,15 @@ class InstructorDashboardView:
         instructor = request.app_user.user
         course = Course.objects.get(id=course_id, instructors__in=[instructor])
         students = Student.objects.filter(courses__in=[course])
+        return Response(StudentSerializer(instance=students, many=True).data, status=200)
+
+    @staticmethod
+    @api_view(['GET'])
+    @permission_classes([IsInstructor])
+    def get_students(request, course_id, batch_id):
+        instructor = request.app_user.user
+        course = Course.objects.get(id=course_id, instructors__in=[instructor])
+        students = Student.objects.filter(courses__in=[course], batch_id=batch_id)
         return Response(StudentSerializer(instance=students, many=True).data, status=200)
     
     @staticmethod

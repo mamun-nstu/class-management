@@ -45,6 +45,17 @@ const COURSES = {
   component: () => import(/* webpackChunkName: "student_form" */ '../views/CourseView.vue')
 };
 
+const BATCHES = {
+  path: '/batches',
+  title: 'Batches',
+  name: 'Batch',
+  icon: 'text-subject',
+  // route level code-splitting
+  // this generates a separate chunk (about.[hash].js) for this route
+  // which is lazy-loaded when the route is visited.
+  component: () => import(/* webpackChunkName: "student_form" */ '../views/BatchView.vue')
+};
+
 const ATTENDANCES = {
   path: '/attendances',
   title: 'Attendances',
@@ -106,6 +117,7 @@ export const INSTRUCTOR_ROUTES = [
 export const ADMIN_ROUTES = [
   STUDENTS,
   COURSES,
+  BATCHES,
   INSTRUCTORS,
 ]
 
@@ -114,6 +126,7 @@ export const routes = [
   ABOUT,
   STUDENTS,
   COURSES,
+  BATCHES,
   ATTENDANCES,
   INSTRUCTORS,
   STUDENT_DASHBOARD,

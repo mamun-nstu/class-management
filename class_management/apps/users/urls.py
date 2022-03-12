@@ -37,7 +37,7 @@ urlpatterns = [
     re_path(r'^instructors/(?P<pk>\d+)/$', InstructorDetail.as_view(), name='instructor_detail'),
     re_path(r'^instructors/$', InstructorList.as_view(), name='instructor_list'),
     re_path(
-        r'^instructors/summary/courses/(?P<course_id>\d+)/?$',
+        r'^instructors/summary/courses/(?P<course_id>\d+)/batches/(?P<batch_id>\d+)/?$',
         InstructorDashboardView.get_attendances,
         name='instructor_dashboard_attendance_summary'
     ),
@@ -45,6 +45,11 @@ urlpatterns = [
         r'^instructors/courses/(?P<course_id>\d+)/students/?$',
         InstructorDashboardView.get_course_students,
         name='instructor_dashboard_course_students'
+    ),
+    re_path(
+        r'^instructors/courses/(?P<course_id>\d+)/batches/(?P<batch_id>\d+)/students/?$',
+        InstructorDashboardView.get_students,
+        name='instructor_dashboard_get_students'
     ),
     re_path(
         r'^instructors/attendances/courses/(?P<course_id>\d+)/students/(?P<student_id>\d+)/?$',

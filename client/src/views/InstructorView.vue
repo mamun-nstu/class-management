@@ -6,7 +6,7 @@
       @delete="delete_instructor"
   >
     <template #edit-data="edit_data">
-      <InstructorForm :key="edit_data.edit_item.id" :data="edit_data.edit_item" :update_data="Boolean(edit_data.edit_item.id)"/>
+      <InstructorForm :key="edit_data.edit_item.id || Math.random()" :data="edit_data.edit_item" :update_data="Boolean(edit_data.edit_item.id)"/>
     </template>
     <template #delete-data="{delete_item}">
       <InstructorForm :key="delete_item.id" :data="delete_item" :update_data="true" :view_only="true" />
@@ -20,11 +20,12 @@ import BackendApi from "../js/backend";
 import instructor_mixin from "../mixins/Instructor";
 import course_mixin from "../mixins/Course";
 import InstructorForm from "../components/forms/InstructorForm";
+import batch_mixin from "../mixins/Batch";
 
 export default {
   name: "InstructorView",
   components: { InstructorForm, GenericView},
-  mixins: [instructor_mixin, course_mixin],
+  mixins: [instructor_mixin, course_mixin, batch_mixin],
   methods: {
     delete_instructor(item) {
       return BackendApi.instructor.delete(item.id)

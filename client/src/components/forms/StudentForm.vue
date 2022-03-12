@@ -38,6 +38,7 @@
         <v-select
             dark
             multiple
+            label="Courses"
             v-model="student.courses"
             no-data-text="No course found"
             placeholder="Select courses"
@@ -46,6 +47,16 @@
             item-text="text"
             item-value="value"
             :items="courses"
+        />
+        <v-select
+            dark
+            label="Batch"
+            v-model="student.batch"
+            no-data-text="No batch found"
+            placeholder="Select batch"
+            item-text="text"
+            item-value="value"
+            :items="batches"
         />
       </div>
     </template>
@@ -100,7 +111,15 @@ export default {
     selected_courses() {
       const courses = _.cloneDeep(this.student.courses);
       return courses.sort((a, b) => a.code < b.code ? -1 : 1);
-    }
+    },
+    batches() {
+      return this.$store.state.batches.data.map((batch) => {
+        return {
+          text: batch.name,
+          value: _.cloneDeep(batch)
+        }
+      }).sort((a, b) => a.text < b.text ? -1 : 1);
+    },
   },
   data: function () {
     return {

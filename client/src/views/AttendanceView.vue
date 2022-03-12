@@ -51,7 +51,7 @@
             <v-card-text class="mt-10">
               <v-row class="student-info">
                 <v-col class="col-5">Course Title : </v-col>
-                <v-col class="col-7">{{selected_course}}</v-col>
+                <v-col class="col-7">{{selected_course_detail.code}}</v-col>
                 <v-divider></v-divider>
                 <v-col class="col-5">Student ID : </v-col>
                 <v-col class="col-7">{{qr_result.student_id}}</v-col>
@@ -105,6 +105,12 @@ export default {
   computed: {
     fetchDependentVars() {
       return `Course:${ this.selected_course }|Batch:${ this.selected_batch }|Date:${ this.date }`
+    },
+    selected_course_detail(){
+      if(this.selected_course) {
+        return this.courses.filter(course => course.id === this.selected_course)[0];
+      }
+      return {};
     }
   },
   watch: {

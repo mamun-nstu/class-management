@@ -10,9 +10,9 @@
           dismissible
       > {{ success ? 'Success' : 'Error occurred' }}
       </v-alert>
-      <ValidationObserver v-slot="{invalid}" slim>
+      <ValidationObserver v-slot="{invalid, handleSubmit}" slim>
         <slot name="form"></slot>
-        <v-btn class="btn-primary" :disabled="invalid" @click="submit"> Submit</v-btn>
+        <v-btn class="btn-primary" @click="handleSubmit(submit)"> Submit</v-btn>
       </ValidationObserver>
     </div>
   </div>
