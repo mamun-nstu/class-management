@@ -95,7 +95,7 @@ export const LOGIN = {
   path: '/login',
   title: 'Login',
   name: 'Login',
-  icon: 'view-dashboard',
+  icon: 'login-variant',
   component: () => import(/* webpackChunkName: "instructor_form" */ '../views/LoginView.vue')
 };
 
@@ -103,7 +103,7 @@ const LOGOUT = {
   path: '/logout',
   title: 'Logout',
   name: 'Logout',
-  icon: 'view-dashboard',
+  icon: 'login-variant',
   component: () => import(/* webpackChunkName: "instructor_form" */ '../views/LogoutView.vue')
 };
 
@@ -111,7 +111,7 @@ const TEST_VIEW = {
   path: '/test',
   title: 'Test',
   name: 'Test',
-  icon: 'view-dashboard',
+  icon: 'bug-check-outline',
   component: () => import(/* webpackChunkName: "instructor_form" */ '../views/TestView.vue')
 };
 

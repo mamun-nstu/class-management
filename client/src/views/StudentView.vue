@@ -4,6 +4,7 @@
       :data="students_list_view"
       :headers="headers"
       @delete="delete_student"
+      class="mb-16"
   >
     <template #edit-data="edit_data">
       <StudentForm :key="edit_data.edit_item.id" :data="edit_data.edit_item" :update_data="Boolean(edit_data.edit_item.id)"/>

@@ -4,6 +4,7 @@
       :data="courses"
       :headers="headers"
       @delete="delete_course"
+      class="mb-16"
   >
     <template #edit-data="edit_data">
       <CourseForm :key="Math.random()" :data="edit_data.edit_item" :update_data="Boolean(edit_data.edit_item.id)"/>

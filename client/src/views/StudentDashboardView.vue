@@ -1,6 +1,6 @@
 <template>
   <div class="attendances">
-    <v-container class="student-dashboard">
+    <v-container class="student-dashboard mb-10">
       <v-row>
         <v-col class="col-md-4 full-height">
           <v-card class="full-height">

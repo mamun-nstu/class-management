@@ -107,7 +107,6 @@ body {
   background-color: darkred;
 }
 .about, .student{
-  max-width: 1200px;
-  margin: auto;
+
 }
 </style>

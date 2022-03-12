@@ -8,11 +8,12 @@
               <p class="text-h4">
                 <span>Welcome</span> <br>to <br><span>ICE Attendance Management System</span>
               </p>
-              <p class="text-h4 mt-16 text-decoration-underline">
+              <p class="text-h5 mt-12 text-decoration-underline">
                 Here You can :
               </p>
-              <v-container class="blue white--text text-h5" style="margin-top: 40px; border-radius: 4px;" >
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab alias aliquid,
+
+              <v-container style="margin-top: 40px; background: #E7F5F7FF" >
+                 <VueTyper class="white--text text-h5" :text='["Take attendance with QR code","See the attenance Summary","See the assigned courses","Calculate attendance percentage automatically"]' />
               </v-container>
             </div>
           </v-img>
@@ -34,8 +35,8 @@
 
     <div class=" middle mt-16" style="height: 700px;">
       <v-row>
-        <v-col class=" col-md-4 full-height mt-11 mr-2 ml-13" style="background: #E7F5F7FF; border-radius:5px; height: 550px;">
-          <p class="ml-2 text-decoration-underline text-h5 text-bold"><b>All Faculty Members:</b></p>
+        <v-col class=" col-md-3 full-height mt-11 mr-2 ml-13" style="background: #E7F5F7FF; border-radius:5px; height: 550px;">
+          <p class=" text-decoration-underline text-h5 text-bold text-center"><b>All Faculty Members:</b></p>
           <v-card shaped v-scroll.self="onScroll" class="text overflow-y-auto" color="#E7F5F7FF" height="550" max-height="550">
             <v-card-text>
               <div class="text-uppercase mt-6" style="font-size: 17px;">
@@ -51,8 +52,8 @@
           </v-card>
         </v-col>
 
-        <v-col class="col-md-3 full-height mt-11 mr-2" style="background: #ECF7EDFF; border-radius:5px; height: 550px;">
-          <p class="ml-2 text-decoration-underline text-h5 text-bold"><b>All Courses:</b></p>
+        <v-col class="col-md-4 full-height mt-11 mr-2" style="background: #ECF7EDFF; border-radius:5px; height: 550px;">
+          <p class=" text-decoration-underline text-h5 text-bold text-center"><b>All Courses:</b></p>
           <v-card shaped v-scroll.self="onScroll" class="text overflow-y-auto" color="#ECF7EDFF" height="550" max-height="550">
           <v-card-text>
               <div class="text-uppercase mt-6" style="font-size: 15px;">
@@ -69,7 +70,7 @@
         </v-col>
 
         <v-col class="col-md-4 full-height mt-11" style="background: #E7F5F7FF; border-radius:5px; height: 550px;">
-          <p class="ml-2 text-decoration-underline text-h5 text-bold"><b>Notice Board:</b></p>
+          <p class=" text-decoration-underline text-h5 text-bold text-center"><b>Notice Board:</b></p>
           <v-card shaped v-scroll.self="onScroll" color="#E7F5F7FF" class="text overflow-y-auto" height="550" max-height="550">
             <v-card-text>
               <p><a class="text-decoration-none " href="#">NSTU ICE Festival. Seminar on future IT technology.</a></p>
@@ -93,7 +94,7 @@
     </div>
 
     <div class=" mt-16" style="height: 350px; background: #202C46;">
-      <v-row  class="" style="margin-left: 200px;">
+      <v-row>
         <v-col class="col-md-4 full-height mt-11">
           <p >
             <span class="white--text text-h5 ml-13" >Total</span>  <br> <span class="white--text text-h5" >Faculty Member</span>
@@ -152,6 +153,7 @@
 
 <script>
 import Backend from "../js/backend";
+import { VueTyper } from 'vue-typer'
 import slider1 from '@/assets/slider1.jpg';
 import slider2 from '@/assets/slider2.jpg';
 import slider3 from '@/assets/slider3.jpg';
@@ -160,6 +162,9 @@ import slider5 from '@/assets/slider5.jpg';
 import slider6 from '@/assets/slider6.jpg';
 export default {
   name: "Home",
+  components: {
+    VueTyper,
+  },
   async created() {
     try {
       this.data = await Backend.generic.get({

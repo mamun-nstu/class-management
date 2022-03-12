@@ -1,10 +1,10 @@
 <template>
   <div class="about">
-    <v-container>
+
         <div class="about white--text text-center" style="height: 75px; background-color: #202C46; opacity: .9">
           <h4 class="pt-6">Department of Information and Communication Engineering </h4>
         </div>
-    </v-container>
+
 
     <v-container>
       <v-layout row wrap class=" grey lighten-3">

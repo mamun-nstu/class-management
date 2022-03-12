@@ -4,6 +4,7 @@
       :data="instructors"
       :headers="headers"
       @delete="delete_instructor"
+      class="mb-16"
   >
     <template #edit-data="edit_data">
       <InstructorForm :key="edit_data.edit_item.id || Math.random()" :data="edit_data.edit_item" :update_data="Boolean(edit_data.edit_item.id)"/>

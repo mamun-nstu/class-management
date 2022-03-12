@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="test">
     <v-text-field v-model="username" placeholder="Enter username"></v-text-field>
     <v-btn @click="get_token">Get Token</v-btn>
   </div>
@@ -22,3 +22,10 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.test{
+  max-width: 1200px;
+  margin: auto;
+}
+
+</style>
