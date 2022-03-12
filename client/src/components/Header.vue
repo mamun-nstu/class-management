@@ -1,14 +1,11 @@
 <template>
-<div>
-
+  <div>
     <v-card
       color="grey lighten-4"
       flat
-
       tile
     >
       <v-toolbar extended color="#202C46">
-
 <!--        <v-avatar tile size="90">-->
 <!--          <v-img src="@/assets/nstu-logo.jpg"> </v-img>-->
 <!--        </v-avatar>-->
@@ -26,34 +23,25 @@
         </v-toolbar-title>
 
         <v-spacer></v-spacer>
-
-       <div class="pt-12 white--text">
-         <v-btn text class="white--text"> Home </v-btn>
-         <v-btn text class="white--text"> About </v-btn>
-         <v-btn text class="white--text"> Student </v-btn>
-         <v-btn text class="white--text"> Courses </v-btn>
-         <v-btn text class="white--text"> Instructor </v-btn>
-         <v-btn text class="white--text"> Dashboard </v-btn>
-       </div>
-
-
-
+         <div class="pt-12 white--text">
+           <v-btn
+             text
+             :class="[$route.name === route.name? 'active-route': '', 'white--text']"
+             v-for="route in routes" :key="route.title" @click="goto_route(route)">
+             {{ route.title }}
+           </v-btn>
+         </div>
       </v-toolbar>
     </v-card>
-
-
-
-
-
-
-</div>
-
-
+  </div>
 </template>
 
 <script>
+import route_mixin from "../mixins/Route";
+
 export default {
   name: "Header",
+  mixins: [route_mixin],
 };
 </script>
 

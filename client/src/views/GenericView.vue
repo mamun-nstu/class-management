@@ -1,68 +1,71 @@
 <template>
-  <v-data-table
+  <div class="crud-view">
+    <v-data-table
       class="elevation-1"
       :headers="headers"
       :items="data"
       sort-by="first_name"
-  >
-    <template v-slot:top>
-      <v-toolbar flat>
-        <v-toolbar-title>{{ title }}</v-toolbar-title>
-        <v-divider
+    >
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title>{{ title }}</v-toolbar-title>
+          <v-divider
             class="mx-4"
             inset
             vertical
-        ></v-divider>
-        <v-spacer></v-spacer>
-        <v-dialog
+          ></v-divider>
+          <v-spacer></v-spacer>
+          <v-dialog
             v-model="dialog"
             max-width="750px"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
                 color="primary"
                 dark
                 class="mb-2"
                 v-bind="attrs"
                 v-on="on"
-            >
-              New {{ title }}
-            </v-btn>
-          </template>
-          <v-card color="#202C46" style="opacity: .9" rounded>
-            <slot name="edit-data" v-bind:edit_item="editedItem"></slot>
-          </v-card>
-        </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="750px" >
-          <v-card color="#202C46" style="opacity: .9">
-            <v-card-title class="text-h5 white--text text-center" >Are you sure you want to delete this item?</v-card-title>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <slot name="delete-data" v-bind:delete_item="itemToDelete"></slot>
-              <v-btn  class="white--text" text @click="closeDelete">Cancel</v-btn>
-              <v-btn class="white--text" text @click="deleteItemConfirm">OK</v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-    </template>
-    <template v-slot:item.actions="{ item }">
-      <v-icon
+              >
+                New {{ title }}
+              </v-btn>
+            </template>
+            <v-card color="#202C46" style="opacity: .9" rounded>
+              <slot name="edit-data" v-bind:edit_item="editedItem"></slot>
+            </v-card>
+          </v-dialog>
+          <v-dialog v-model="dialogDelete" max-width="750px">
+            <v-card color="#202C46" style="opacity: .9">
+              <v-card-title class="text-h5 white--text text-center">Are you sure you want to delete this item?
+              </v-card-title>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <slot name="delete-data" v-bind:delete_item="itemToDelete"></slot>
+                <v-btn class="white--text" text @click="closeDelete">Cancel</v-btn>
+                <v-btn class="white--text" text @click="deleteItemConfirm">OK</v-btn>
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <v-icon
           small
           class="mr-2"
           @click="editItem(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
+        >
+          mdi-pencil
+        </v-icon>
+        <v-icon
           small
           @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
-    </template>
-  </v-data-table>
+        >
+          mdi-delete
+        </v-icon>
+      </template>
+    </v-data-table>
+  </div>
 </template>
 
 <script>
@@ -84,7 +87,7 @@ export default {
       required: true
     }
   },
-
+  
   data: function () {
     return {
       dialog: false,
@@ -108,24 +111,24 @@ export default {
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
-
+    
     deleteItem(item) {
       this.itemToDelete = Object.assign({}, item)
       this.dialogDelete = true
     },
-
+    
     deleteItemConfirm() {
       this.$emit('delete', this.itemToDelete);
       this.closeDelete();
     },
-
+    
     close() {
       this.dialog = false
       this.$nextTick(() => {
         this.editedItem = {};
       })
     },
-
+    
     closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
@@ -133,10 +136,14 @@ export default {
       })
     }
   }
-
+  
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.crud-view {
+  max-width: 900px;
+  width: 100%;
+  margin: auto;
+}
 </style>

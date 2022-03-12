@@ -1,4 +1,4 @@
-const generalMixing = {
+const general_mixin = {
   methods: {
     capitalize: function (string) {
       string = string || '';
@@ -7,4 +7,4 @@ const generalMixing = {
   }
 };
 
-export default generalMixing;
+export default general_mixin;

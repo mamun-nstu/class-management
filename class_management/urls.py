@@ -23,8 +23,6 @@ admin.site.enable_nav_sidebar = False
 
 urlpatterns = [
     re_path(r'^admin/', admin.site.urls),
-    re_path(r'^auth/', include('djoser.urls')),
-    re_path(r'^auth/', include('core.urls')),
     re_path(r'^api/', include('core.urls')),
     re_path(r'^status/', include('status.urls', namespace='status')),
     re_path(r'^api/', include('users.urls', namespace='users'))

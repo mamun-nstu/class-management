@@ -91,6 +91,22 @@ const INSTRUCTOR_DASHBOARD = {
   component: () => import(/* webpackChunkName: "instructor_form" */ '../views/InstructortDashboardView.vue')
 };
 
+export const LOGIN = {
+  path: '/login',
+  title: 'Login',
+  name: 'Login',
+  icon: 'view-dashboard',
+  component: () => import(/* webpackChunkName: "instructor_form" */ '../views/LoginView.vue')
+};
+
+const LOGOUT = {
+  path: '/logout',
+  title: 'Logout',
+  name: 'Logout',
+  icon: 'view-dashboard',
+  component: () => import(/* webpackChunkName: "instructor_form" */ '../views/LogoutView.vue')
+};
+
 const TEST_VIEW = {
   path: '/test',
   title: 'Test',
@@ -106,12 +122,14 @@ export const COMMON_ROUTES = [
 ];
 
 export const STUDENT_ROUTES = [
-  STUDENT_DASHBOARD
+  STUDENT_DASHBOARD,
+  LOGOUT,
 ];
 
 export const INSTRUCTOR_ROUTES = [
   ATTENDANCES,
   INSTRUCTOR_DASHBOARD,
+  LOGOUT,
 ];
 
 export const ADMIN_ROUTES = [
@@ -119,7 +137,8 @@ export const ADMIN_ROUTES = [
   COURSES,
   BATCHES,
   INSTRUCTORS,
-]
+  LOGOUT,
+];
 
 export const routes = [
   HOME,
@@ -132,6 +151,8 @@ export const routes = [
   STUDENT_DASHBOARD,
   INSTRUCTOR_DASHBOARD,
   TEST_VIEW,
+  LOGIN,
+  LOGOUT,
 ];
 
 export const router = new VueRouter({

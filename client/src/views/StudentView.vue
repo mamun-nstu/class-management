@@ -1,7 +1,7 @@
 <template>
   <GenericView
       title="Student"
-      :data="students"
+      :data="students_list_view"
       :headers="headers"
       @delete="delete_student"
   >
@@ -47,6 +47,7 @@ data: function () {
         value: 'student_id',
       },
       {text: 'Email Address', value: 'username'},
+      {text: 'Batch', value: 'batch_name'},
       {text: 'Full Name', value: 'full_name'},
       {text: 'Actions', value: 'actions', sortable: false},
     ],

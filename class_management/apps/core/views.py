@@ -10,52 +10,17 @@ from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.tokens import Token
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
 from core.models import Course, Attendance
 from core.serializers import CourseSearializer, AttendanceSerializer, GenericStudentSerializer
-from core.utils import UserJWT, get_user_from_username
-from users.models import Batch, Student
+from core.utils import get_user_from_username, UserJWT
+from users.models import Batch, Student, Instructor
 from users.permission import IsInstructor, IsAdmin
 
-
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-        
-        # Add custom claims
-        token['name'] = 'Tahmid'
-        # ...
-        
-        return token
-
-
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
-
-
-class JWTToken():
-    def __init__(self, token):
-        self.token = Token(token, verify=False)
-    
-    @property
-    def is_valid(self):
-        try:
-            self.token.verify()
-            return True
-        except Exception:
-            return False
-    
-    @property
-    def payload(self):
-        return self.token.payload
 
 
 @permission_classes([permissions.IsAdminUser,])
@@ -130,7 +95,7 @@ class CourseDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = CourseSearializer
 
 
-@permission_classes([IsAdmin])
+@permission_classes([])
 class CreateSessionView(APIView):
     def post(self, request):
         token = request.data.get('token')
@@ -140,8 +105,13 @@ class CreateSessionView(APIView):
             idinfo = id_token.verify_oauth2_token(token, requests.Request(), client_id)
             userid = idinfo['sub']
             username = idinfo.get('email')
-            request.session['user'] = username
-            return Response(status=200)
+            user = get_user_from_username(username=username)
+            if not user:
+                return Response({'error': 'user not found'}, status=404)
+            token = UserJWT.generate_jwt(user)
+            response = Response({'token': token}, status=200)
+            response.set_cookie('auth_token', token, path='/')
+            return response
         except Exception as e:
             # Invalid token
             pass
@@ -167,4 +137,16 @@ class UploadUserImage(APIView):
         res = fs.save(file_name, file_obj)
         res = f'{self.img_location}/{res}'
         return Response({'upload_url': res}, status=200)
+
+
+@permission_classes([])
+class AppInfo(APIView):
+    def get(self, request):
+        data = {
+            'total_students': Student.objects.count(),
+            'total_instructors': Instructor.objects.count(),
+            'total_courses': Course.objects.count(),
+            'total_batches': Batch.objects.count()
+        }
+        return Response(data, status=200)
 

@@ -1,4 +1,4 @@
-import {UPDATE_STUDENTS} from "../store/mutation_types";
+import { UPDATE_STUDENTS } from "../store/mutation_types";
 
 const student_mixin = {
   created() {
@@ -8,6 +8,16 @@ const student_mixin = {
     students() {
       return this.$store.state.students.data;
     },
+    students_list_view() {
+      return this.students.map(student => {
+        return {
+          ...student,
+          batch_name: student.batch? student.batch.name: ''
+        }
+
+
+      })
+    }
   }
 };
 
