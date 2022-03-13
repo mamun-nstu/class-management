@@ -94,7 +94,7 @@
     </div>
 
     <div class=" mt-16" style="height: 350px; background: #202C46;">
-      <v-row>
+      <v-row  class="" style="margin-left: 200px;">
         <v-col class="col-md-4 full-height mt-11">
           <p >
             <span class="white--text text-h5 ml-13" >Total</span>  <br> <span class="white--text text-h5" >Faculty Member</span>
@@ -127,15 +127,17 @@
       </v-row>
 
     </div>
-    <div class=" " style="height: 500px; background: #F0E9FBFF;">
-      <p class="pa-5 text-center text-decoration-underline text-h4 text-bold"><b>Why this site </b></p>
+    <div class=" " style="height: 600px; background: #F0E9FBFF;">
+      <p class="pa-10 text-center text-decoration-underline text-h4 text-bold"><b>Why this site </b></p>
       <div class=" text-center justify-text">
         <p class="whythis" style=" text-align: justify">
-          Nowadays managing the attendance of people may be a difficult task for many of the big organizations or institutions where there
+          An attendance System is an information system that monitors the presence of someone in an organization. Student Attendance
+          Management System is used only for educational institutions. Nowadays managing the attendance of people may be a difficult task for many of the big organizations or institutions where there
           are hundreds of people. Maintaining their attendance record is a vital thing about people management. When considering the
           educational institute, this is even more difficult because of having thousands of students. Taking the attendance of students of
-          various academic sessions manually on paper is time-consuming and we need to deal with a lot of paperwork here. In an educational
-          institute maintaining the records of students is a major task in the academic period so if it can be done only by using some sort
+          various academic sessions manually on paper is time-consuming and we need to deal with a lot of paperwork here.
+          In this project, I will develop a student attendance management system for the Information & Communication Engineering (ICE) department of Noakhali Science & Technology University. It’s a web-based application software developed for taking daily attendance of a particular student in a particular class, monitoring all the students, calculating attendance summaries, and making periodical attendance reports. By using this application our teachers can easily manage student attendance and student can also view their attendance reports at any time from anywhere.
+          In an educational institute maintaining the records of students is a major task in the academic period so if it can be done only by using some sort
           of application or software then it will be so time-saving. We also don’t need to deal with a lot of paperwork, storing them and
           managing them for attendance record analysis. For this reason, I have proposed an efficient system in this project proposal to solve
           the problem of manual attendance. This system takes attendance electronically with the help of a web-based application by using a
@@ -206,8 +208,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.middle{
-  max-width: 1300px;
+.middle, .whythis{
+  max-width: 1200px;
   margin: auto;
 }
 
