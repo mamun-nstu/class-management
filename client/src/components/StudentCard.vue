@@ -1,23 +1,22 @@
 <template>
   <div>
     <div id="student-card" class="student-card">
-      <div>
-        <div class="nstu-logo">
+      <div class="text-center ">
+        <div class="nstu-logo mt-2 mb-2">
           <img :src="nstu_logo"/>
         </div>
         <div>
           <h2>Noakhali Science and Technology University</h2>
         </div>
       </div>
-      <div>
+      <div class="text-center">
         <p>Name: {{ student.full_name }}</p>
         <p>Student ID: {{ student.student_id }}</p>
         <p>Batch: {{ student.batch ? student.batch.name : '' }}</p>
       </div>
-      <div class="qr-img-container">
+      <div class="qr-img-container text-center">
         <img :src="this.qr_code_base64" class="qr-img"/>
       </div>
-    
     </div>
   </div>
 </template>
