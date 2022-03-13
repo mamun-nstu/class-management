@@ -7,7 +7,8 @@
             <v-card-title class="card-heading" style="background-color: #202C46">Student Details</v-card-title>
             <v-card-text>
               <div class="student-detail">
-                <img class="mb-8" height="100%" width="100%" v-if="student.image" :src="student.image" :alt="student.full_name" />
+                <img class="mb-8" height="100%" width="100%" v-if="student.image" :src="student.image"
+                     :alt="student.full_name"/>
                 <p class="name">{{ student.full_name }}</p>
                 <p>Student ID: {{ student.student_id }}</p>
                 <p>Email: {{ student.username }}</p>
@@ -30,13 +31,16 @@
           <v-card>
             <v-card-title class="card-heading rounded" style="background-color: #202C46">Secret QR Code</v-card-title>
             <v-card-text>
-              <QRCodeGenerator id="qrcode" :size="250" class="pt-5" :value="JSON.stringify(generalized_student)"/>
-              <div class="d-flex justify-center" >
-                <a download="qrcode.png" href="" @click="download_image" class="text-button white--text ma-4 rounded text-decoration-none" style="background-color: #202C46; text-align: center; padding-top: 3px; width: 160px; height: 40px;">Download</a>
+              <QRCodeGenerator id="qrcode" :size="250" class="pt-5" :value="qr_student_code"/>
+              <div class="d-flex justify-center">
+                <v-btn
+                  @click.prevent="download_image"
+                  :loading="generating_base64_qr"
+                   class="text-button white--text ma-4 rounded text-decoration-none"
+                   style="background-color: #202C46; text-align: center; padding-top: 3px; width: 160px; height: 40px;">Download</v-btn>
               </div>
             </v-card-text>
           </v-card>
-
         </v-col>
         <v-col class="col-md-8">
           <v-card class="ml-5">
@@ -55,8 +59,10 @@
                   :items="courses"
                 />
               </div>
-              <div class="d-flex justify-center p-4" >
-                <v-btn class="white--text" @click.prevent="get_attendances"  style="background-color: #202C46">Get Attendances</v-btn>
+              <div class="d-flex justify-center p-4">
+                <v-btn class="white--text" @click.prevent="get_attendances" style="background-color: #202C46">Get
+                  Attendances
+                </v-btn>
               </div>
               <div v-if="attendances.length">
                 <v-simple-table>
@@ -85,7 +91,8 @@
                 <v-card class="pt-3 pb-3 m-2 " style="background-color: #202C46; opacity: .8">
                   <v-card-text class="white--text"><b>Total Classes:</b> {{ attendances.length }}</v-card-text>
                   <v-card-text class="white--text"><b>Present counts:</b> {{ presents }}</v-card-text>
-                  <v-card-text class="white--text"><b>Present Percentage:</b> {{ attendance_percentange }}%</v-card-text>
+                  <v-card-text class="white--text"><b>Present Percentage:</b> {{ attendance_percentange }}%
+                  </v-card-text>
                 </v-card>
               
               </div>
@@ -94,19 +101,20 @@
         </v-col>
       </v-row>
     </v-container>
+    <StudentCard v-show="false" :qr_code_base64="qr_code_base64" :student="student"/>
   </div>
 </template>
 
 <script>
-
-
+import { jsPDF } from "jspdf";
 import BackendApi from "../js/backend";
 import QRCodeGenerator from "../components/QRCodeGenerator";
 import StudentAttendanceSummary from "../components/StudentAttendanceSummary";
+import StudentCard from "../components/StudentCard";
 
 export default {
   name: "StudentDashboardView",
-  components: { StudentAttendanceSummary, QRCodeGenerator },
+  components: { StudentCard, StudentAttendanceSummary, QRCodeGenerator },
   data() {
     return {
       student: {},
@@ -114,6 +122,26 @@ export default {
       attendances: [],
       attendance_summary: [],
       selected_course: '',
+      qr_code_base64: '',
+      generating_base64_qr: true,
+    }
+  },
+  watch: {
+    qr_student_code: {
+      immediate: true,
+      handler(new_val) {
+        const canvas = document.querySelector('#qrcode > canvas');
+        if (!canvas) {
+          return;
+        }
+        const app = this;
+        setTimeout(() => {
+          const img = canvas.toDataURL("image/png");
+          app.qr_code_base64 = img;
+          app.generating_base64_qr = false;
+        }, 3000);
+        
+      }
     }
   },
   computed: {
@@ -123,14 +151,14 @@ export default {
         return prev + (cur.present === true ? 1 : 0);
       }, 0);
     },
-    generalized_student() {
-      const val =  {
+    qr_student_code() {
+      const json = {
         id: this.student.id,
         student_id: this.student.student_id,
         username: this.student.username,
         full_name: this.student.full_name
       };
-      console.log(JSON.stringify(val));
+      const val = JSON.stringify(json) || '{}';
       return val;
     },
     attendance_percentange() {
@@ -159,11 +187,17 @@ export default {
   },
   methods: {
     download_image(event) {
-      const el = event.srcElement;
-      console.log(el);
-      const canvas = document.querySelector('#qrcode > canvas');
-      const img = canvas.toDataURL("image/png");
-      el.href = img;
+      const doc = jsPDF('p', 'pt', [300, 300]);
+      const img = this.qr_code_base64;
+      console.log(img);
+      const el_to_download = document.getElementById('student-card');
+      const app = this;
+      doc.html(el_to_download, {
+        callback: function (doc) {
+          doc.save(`${app.student.full_name}.pdf`);
+        },
+      });
+      
     },
     get_attendances() {
       return BackendApi.student.get_attendances(this.selected_course.id)
