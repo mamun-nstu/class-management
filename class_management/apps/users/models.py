@@ -23,7 +23,6 @@ CHOICES = (
 class CustomUsers(models.Model):
     full_name = models.CharField(max_length=255)
     username = models.CharField(max_length=255)
-    date_joined = models.DateField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True, upload_to='uploads/user-imgs/')
 
     def image_tag(self):
@@ -38,8 +37,6 @@ class CustomUsers(models.Model):
 class Batch(models.Model):
     name = models.CharField(max_length=25, unique=True, db_index=True)
     active = models.BooleanField(default=True)
-    start = models.DateField(null=True, blank=True)
-    end = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.name}'

@@ -18,7 +18,7 @@
             :rules="{required: true}"
         />
 
-        <v-checkbox label="Active" v-model="course.active"/>
+        <v-checkbox class="white--text" dark label="Active" v-model="course.active"/>
 
       </div>
     </template>

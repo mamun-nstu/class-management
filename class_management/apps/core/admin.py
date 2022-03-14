@@ -6,7 +6,7 @@ from core.models import Course, CourseInstructors, Notice, Attendance
 
 class CourseInline(admin.TabularInline):
     model = Course.instructors.through
-    ordering = ('-start', 'active')
+    ordering = ('active',)
 
 
 @admin.register(Course)
@@ -18,7 +18,7 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(CourseInstructors)
 class CourseInstructorsAdmin(admin.ModelAdmin):
-    ordering = ('-start', 'active')
+    ordering = ('active',)
 
 @admin.register(Attendance)
 class AttendanceAdmin(admin.ModelAdmin):

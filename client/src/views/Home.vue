@@ -6,7 +6,7 @@
           <v-img class="white--text text-center text-capitalize ml-4" src="@/assets/bg1.jpg" height="450" style="border-radius: 12px;">
             <div class="mt-16">
               <p class="text-h4">
-                <span>Welcome</span> <br>to <br><span>ICE Attendance Management System</span>
+                <span>Welcome</span> <br>to <br><span>Smart Attendance Management System</span>
               </p>
               <p class="text-h5 mt-12 text-decoration-underline">
                 Here You can :

@@ -13,7 +13,7 @@
             :rules="{required: true}"
         />
 
-        <v-checkbox label="Active" v-model="batch.active"/>
+        <v-checkbox dark label="Active" v-model="batch.active"/>
 
       </div>
     </template>

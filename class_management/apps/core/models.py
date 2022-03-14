@@ -18,8 +18,6 @@ class Course(models.Model):
 class CourseInstructors(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, db_index=True)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE, db_index=True, related_name='course_details')
-    start = models.DateField()
-    end = models.DateField(null=True, blank=True)
     batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
 

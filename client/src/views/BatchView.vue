@@ -1,6 +1,7 @@
 <template>
   <GenericView
       title="Batch"
+      class="mb-16"
       :data="batches"
       :headers="headers"
       @delete="delete_batch"

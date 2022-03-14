@@ -21,7 +21,7 @@
             v-model="instructor.full_name"
             :rules="{required: true}"
         />
-        <v-btn dark @click="add_course">Add Course</v-btn>
+        <v-btn dark @click="add_course" style="background: #202C46">Add Course</v-btn>
         <div v-for="detail in instructor.course_details" :key="`${detail.random_id}`">
           <div class="row">
             <div class="col-md-5">
