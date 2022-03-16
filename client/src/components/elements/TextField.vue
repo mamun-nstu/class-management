@@ -11,7 +11,7 @@
         :placeholder="placeholder"
         outlined
     ></v-text-field>
-    <p v-if="errors.length > 0" class="error"> {{ errors[0] }} </p>
+    <p v-if="errors.length > 0" class="error-msg"> {{ errors[0] }} </p>
   </ValidationProvider>
 </template>
 

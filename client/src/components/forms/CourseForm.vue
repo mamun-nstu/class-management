@@ -4,6 +4,7 @@
       :data="course"
       :key="data.id"
       :method="update_data ? 'put': 'post'"
+      :view_only="view_only"
   >
     <template #form>
       <div class="course register">

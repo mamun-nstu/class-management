@@ -93,6 +93,13 @@ body {
   background-color: #FFFFFF !important;
 }
 
+p.error-msg {
+  color: red;
+  margin-top: -5px;
+  padding: 0;
+  font-weight: 700;
+}
+
 #app {
   margin: auto;
   align-content: center;

@@ -36,15 +36,17 @@
           </v-dialog>
           <v-dialog v-model="dialogDelete" max-width="750px">
             <v-card color="#202C46" style="opacity: .9">
-              <v-card-title class="text-h5 white--text text-center">Are you sure you want to delete this item?
+              <v-card-title class="text-h5 white--text text-center"><p style="margin: auto">Are you sure you want to delete this item?</p>
               </v-card-title>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <slot name="delete-data" v-bind:delete_item="itemToDelete"></slot>
-                <v-btn class="white--text" text @click="closeDelete">Cancel</v-btn>
-                <v-btn class="white--text" text @click="deleteItemConfirm">OK</v-btn>
                 <v-spacer></v-spacer>
               </v-card-actions>
+              <div class="d-flex justify-center">
+                <v-btn style="width: 150px; background-color: #FFFFFF; color: black"  class="px-10 mx-10 my-10" text @click="closeDelete">Cancel</v-btn>
+                <v-btn style="width: 150px; background-color: red; color: white" class="px-10 mx-10 my-10" text @click="deleteItemConfirm">OK</v-btn>
+              </div>
             </v-card>
           </v-dialog>
         </v-toolbar>

@@ -3,6 +3,7 @@
       :url="'/api/students/'"
       :data="student"
       :method="update_data ? 'put': 'post'"
+      :view_only="view_only"
   >
     <template #form>
       <div class="student register">
@@ -36,19 +37,19 @@
           prepend-icon=""
       ></v-file-input>
         <v-select
-            dark
-            multiple
-            label="Courses"
-            v-model="student.courses"
-            no-data-text="No course found"
-            placeholder="Select courses"
-            :chips="true"
-            :deletable-chips="true"
-            item-text="text"
-            item-value="value"
-            :items="courses"
+          dark
+          multiple
+          label="Courses"
+          v-model="student.courses"
+          no-data-text="No course found"
+          placeholder="Select courses"
+          :chips="true"
+          :deletable-chips="true"
+          item-text="text"
+          item-value="value"
+          :items="courses"
         />
-        <v-select
+        <SelectField
             dark
             label="Batch"
             v-model="student.batch"
@@ -57,6 +58,7 @@
             item-text="text"
             item-value="value"
             :items="batches"
+            :rules="{required: true}"
         />
       </div>
     </template>
@@ -67,10 +69,12 @@
 import FormContainer from "./FormContainer";
 import TextField from "../elements/TextField";
 import _ from 'lodash';
+import SelectField from "../elements/SelectField";
 
 export default {
   name: "StudentForm",
   components: {
+    SelectField,
     TextField,
     FormContainer,
   },

@@ -4,7 +4,7 @@
         v-bind="$attrs"
         v-on="$listeners"
     ></v-select>
-    <p v-if="errors.length > 0" class="error"> {{ errors[0] }} </p>
+    <p v-if="errors.length > 0" class="error-msg"> {{ errors[0] }} </p>
   </ValidationProvider>
 </template>
 
@@ -15,15 +15,6 @@ export default {
   name: "SelectField",
   components: {
     ValidationProvider
-  },
-  methods: {
-    update: function (val) {
-      console.log('Here ', val);
-      this.$emit("input", val);
-    },
-    do_nothing: function () {
-
-    }
   },
   props: {
     rules: {

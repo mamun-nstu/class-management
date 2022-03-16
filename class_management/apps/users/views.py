@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import permissions
 from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
@@ -82,7 +83,8 @@ class StudentList(ListCreateAPIView):
             query.update({'courses__in': [course]})
         queryset = Student.objects.filter(**query)
         return queryset
-    
+
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         student_data = request.data
         # nested data problem in serializer
@@ -108,7 +110,8 @@ class StudentList(ListCreateAPIView):
 class StudentDetail(RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    
+
+    @transaction.atomic
     def put(self, request, *args, **kwargs):
         id = kwargs.get('pk')
         student_data = request.data
@@ -139,7 +142,8 @@ class StudentDetail(RetrieveUpdateDestroyAPIView):
 class InstructorList(ListCreateAPIView):
     queryset = Instructor.objects.all()
     serializer_class = InstructorSerializer
-    
+
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         instructor_data = request.data
         # nested data problem in serializer
@@ -157,7 +161,6 @@ class InstructorList(ListCreateAPIView):
                     course=Course.objects.get(id=course.get('id')),
                     instructor=instructor,
                     batch=Batch.objects.get(id=batch.get('id')),
-                    start=timezone.now()
                 )
                 ci.save()
             
@@ -169,7 +172,8 @@ class InstructorList(ListCreateAPIView):
 class InstructorDetail(RetrieveUpdateDestroyAPIView):
     queryset = Instructor.objects.all()
     serializer_class = InstructorSerializer
-    
+
+    @transaction.atomic
     def put(self, request, *args, **kwargs):
         id = kwargs.get('pk')
         instructor_data = request.data
@@ -194,7 +198,6 @@ class InstructorDetail(RetrieveUpdateDestroyAPIView):
                     course=Course.objects.get(id=course.get('id')),
                     instructor=instructor,
                     batch=Batch.objects.get(id=batch.get('id')),
-                    start=timezone.now()
                 )
                 ci.save()
             

@@ -33,12 +33,12 @@ export default {
           .then(res => {
             console.log(res);
             this.success = true;
+            window.location.reload();
           }).catch(err => {
             console.error(err);
           }).finally(() => this.show_confirm = true);
   }
-}
-,
+},
 data: function () {
   return {
     headers: [

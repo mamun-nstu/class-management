@@ -22,7 +22,7 @@ CHOICES = (
 
 class CustomUsers(models.Model):
     full_name = models.CharField(max_length=255)
-    username = models.CharField(max_length=255)
+    username = models.CharField(max_length=255, unique=True, db_index=True)
     image = models.ImageField(null=True, blank=True, upload_to='uploads/user-imgs/')
 
     def image_tag(self):

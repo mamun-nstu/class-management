@@ -2,8 +2,9 @@
   <FormContainer
     :url="'/api/instructors/'"
     :data="instructor"
-    :key="instructor.id"
+    :key="form_container_key"
     :method="update_data ? 'put': 'post'"
+    :view_only="view_only"
   >
     <template #form>
       <div class="instructor register">
@@ -100,7 +101,7 @@ export default {
   },
   mounted() {
     this.instructor = _.cloneDeep(this.data) || {};
-    this.instructor.course_details = this.instructor.course_details || [];
+    this.instructor.course_details = this.instructor.course_details || [{}];
     this.instructor.image = null;
     this.instructor.course_details = this.instructor.course_details.map(detail => {
       this.random_id += 1;
@@ -112,6 +113,9 @@ export default {
     
   },
   computed: {
+    // form_container_key(){
+    //   return JSON.stringify(this.instructor);
+    // },
     courses() {
       return this.$store.state.courses.data.map((course) => {
         return {
@@ -139,17 +143,20 @@ export default {
         course_details: []
       },
       random_id: 0,
+      form_container_key: 100,
     }
   },
   methods: {
     add_course(){
       this.random_id += 1;
+      this.form_container_key += 1;
       this.instructor.course_details = [{random_id: this.random_id}, ...this.instructor.course_details];
       console.log(this.random_id, this.instructor.course_details);
     },
     delete_course(detail){
       this.instructor.course_details = this.instructor.course_details.filter(val => val.random_id !== detail.random_id);
       this.instructor.course_details = [...this.instructor.course_details];
+      this.form_container_key += 1;
     }
   }
 };
