@@ -67,6 +67,8 @@ export default {
         if (typeof this.error_msg === 'object') {
           if (this.error_msg.username) {
             this.error_msg = 'Username is already taken';
+          } else if (this.error_msg.student_id) {
+            this.error_msg = 'Student ID is already taken';
           }
         }
       }
