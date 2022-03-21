@@ -39,12 +39,25 @@
           <p class=" text-decoration-underline text-h5 text-bold text-center"><b>All Faculty Members:</b></p>
           <v-card shaped v-scroll.self="onScroll" class="text overflow-y-auto" color="#E7F5F7FF" height="550" max-height="550">
             <v-card-text>
-              <div class="text-uppercase mt-6" style="font-size: 17px;">
+              <div class="text-uppercase mt-6" style="font-size: 15px;">
                  <b>
                    <ul>
-                    <li v-for="instructor in data.instructors || []" :key="`${Math.random()}-${instructor.full_name}`">
-                      <p>{{instructor.full_name}}</p>
-                    </li>
+                    <li><p>Dr. Md. Ashikur Rahman Khan</p></li>
+                    <li><p>Dr. Abidur Rahaman</p></li>
+                    <li><p>Zayed- Us- Salehin</p></li>
+                    <li><p>Md. Saifur Rahman</p></li>
+                    <li><p>K. M. Aslam Uddin</p></li>
+                    <li><p>Mohammad Amzad Hossain</p></li>
+                    <li><p>Sultana Jahan Soheli</p></li>
+                    <li><p>Masudur Rahman</p></li>
+                    <li><p>Tanvir Zaman Khan</p></li>
+                    <li><p>Nishu Nath</p></li>
+                    <li><p>Apurba Adhikary</p></li>
+                    <li><p>Main Uddin</p></li>
+                    <li><p>Md. Bipul Hossain</p></li>
+                    <li><p>Md. Mahbubul Alam</p></li>
+                    <li><p>Md. Sabbir Ejaz</p></li>
+                    <li><p>Mohammad Kamrul Hasan</p></li>
                    </ul>
                  </b>
               </div>
