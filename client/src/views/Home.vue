@@ -13,7 +13,7 @@
               </p>
 
               <v-container style="margin-top: 40px; background: #E7F5F7FF" >
-                 <VueTyper class="white--text text-h5" :text='["Take attendance with QR code","See the attenance Summary","See the assigned courses","Calculate attendance percentage automatically"]' />
+                 <VueTyper class="white--text text-h5 text-capitalize" :text='["Take attendance with QR code","See the Attendance Summary","See the assigned courses","Calculate attendance percentage automatically"]' />
               </v-container>
             </div>
           </v-img>
@@ -113,7 +113,7 @@
             <span class="white--text text-h5 ml-13" >Total</span>  <br> <span class="white--text text-h5" >Faculty Member</span>
           </p>
           <v-avatar class="text-h3" size="150" color="white" style="opacity: .8">
-            {{ data.total_instructors }}
+            16
           </v-avatar>
         </v-col>
 

@@ -35,6 +35,7 @@ const route_mixin = {
         routes_to_add = [LOGIN];
       }
       this.routes = [...this.routes, ...routes_to_add];
+      this.routes = this.routes.filter(route => route.name !== "Test")
     },
     goto_route(route) {
       if(this.$route.name === route.name) {
